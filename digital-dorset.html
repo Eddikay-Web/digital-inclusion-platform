@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Dorset — Digital Inclusion Platform</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--gb:#0b0c0c;--gw:#ffffff;--gbl:#1d70b8;--gbld:#003078;--gg:#00703c;--gr:#d4351c;--gy:#ffdd00;
+--gor:#f47738;--gg1:#f3f2f1;--gg2:#b1b4b6;--gg3:#505a5f;--gbd:#b1b4b6;
+--tbl-bg:#d2e2f1;--tbl-tx:#144e81;--tgn-bg:#cce2d8;--tgn-tx:#005a30;
+--trd-bg:#f6d7d2;--trd-tx:#942514;--tyl-bg:#fff7bf;--tyl-tx:#594d00;
+--tgy-bg:#eeefef;--tgy-tx:#383f43;--tur-bg:#bfe3e0;--tur-tx:#10403c;
+--tpu-bg:#dbd5e9;--tpu-tx:#3d2375;
+}
+body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb);background:var(--gg1);min-height:100vh}
+.skip{display:block;padding:6px 12px;background:var(--gy);color:var(--gb);font-weight:700;font-size:14px;text-align:center;text-decoration:none;position:absolute;left:-9999px}
+.skip:focus{left:0;position:relative}
+.gvk-header{background:var(--gb);border-bottom:10px solid var(--gbl);padding:10px 0}
+.gvk-header__inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.gvk-header__logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.gvk-header__org{color:#fff;font-size:18px;font-weight:700}
+.gvk-header__product{color:rgba(255,255,255,0.75);font-size:13px;margin-left:8px;padding-left:8px;border-left:1px solid rgba(255,255,255,0.3)}
+.gvk-header__user{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.8)}
+.gvk-header__user a{color:#fff;text-decoration:underline;cursor:pointer}
+.phase-banner{background:var(--gw);border-bottom:1px solid var(--gbd);padding:6px 20px}
+.phase-banner__inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap}
+.govuk-tag{display:inline-block;font-size:14px;font-weight:700;padding:2px 8px;letter-spacing:1px;text-transform:uppercase;line-height:1.2}
+.govuk-tag--blue{background:var(--tbl-bg);color:var(--tbl-tx)}
+.govuk-tag--green{background:var(--tgn-bg);color:var(--tgn-tx)}
+.govuk-tag--red{background:var(--trd-bg);color:var(--trd-tx)}
+.govuk-tag--yellow{background:var(--tyl-bg);color:var(--tyl-tx)}
+.govuk-tag--grey{background:var(--tgy-bg);color:var(--tgy-tx)}
+.govuk-tag--turquoise{background:var(--tur-bg);color:var(--tur-tx)}
+.govuk-tag--purple{background:var(--tpu-bg);color:var(--tpu-tx)}
+.govuk-tag--orange{background:#fcd6c3;color:#6e3619}
+.phase-link{color:var(--gbl);text-decoration:underline}
+.tour-bar{background:var(--gbl);color:#fff;padding:8px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}
+.tour-bar__step{font-weight:700}
+.tour-bar__controls{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.tour-bar__btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);color:#fff;padding:4px 10px;font-size:12px;cursor:pointer;font-family:arial,sans-serif}
+.tour-bar__btn:hover{background:rgba(255,255,255,0.3)}
+.breadcrumb{padding:8px 20px;background:var(--gw);border-bottom:1px solid var(--gbd);font-size:14px}
+.breadcrumb__inner{max-width:1200px;margin:0 auto}
+.breadcrumb ol{list-style:none;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.breadcrumb li+li::before{content:"›";margin-right:4px;color:var(--gg3)}
+.breadcrumb a{color:var(--gbl);text-decoration:underline}
+.module-nav{display:flex;border-bottom:3px solid var(--gb);padding:0 20px;background:var(--gg1)}
+.module-nav__inner{max-width:1200px;margin:0 auto;display:flex}
+.module-tab{padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--gg3);border-top:4px solid transparent;border-bottom:3px solid transparent;margin-bottom:-3px;font-family:arial,sans-serif}
+.module-tab:hover{color:var(--gb)}
+.module-tab.active{background:var(--gw);color:var(--gb);border-top-color:var(--gbl);border-bottom-color:var(--gw)}
+.module-tab:focus{outline:3px solid var(--gy);outline-offset:0}
+.main{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+.govuk-h1{font-size:32px;font-weight:700;line-height:1.15;color:var(--gb);margin:0 0 8px}
+.govuk-h2{font-size:24px;font-weight:700;line-height:1.2;color:var(--gb);margin:0 0 14px}
+.govuk-h3{font-size:18px;font-weight:700;line-height:1.3;color:var(--gb);margin:0 0 10px}
+.govuk-body{font-size:16px;line-height:1.5;color:var(--gb);margin:0 0 14px}
+.govuk-body-s{font-size:14px;line-height:1.4;color:var(--gg3);margin:0 0 10px}
+.govuk-hint{font-size:14px;color:var(--gg3);margin:0 0 6px;display:block}
+.govuk-caption{font-size:18px;color:var(--gg3);font-weight:400;margin:0 0 6px}
+.govuk-btn{font-size:16px;font-weight:700;padding:8px 14px;border:2px solid transparent;cursor:pointer;font-family:arial,sans-serif;background:var(--gg);color:#fff;box-shadow:0 2px 0 #002d18;display:inline-block;text-decoration:none;margin-bottom:3px;line-height:1.3}
+.govuk-btn:hover{background:#005a30}
+.govuk-btn:focus{outline:3px solid var(--gy);outline-offset:0}
+.govuk-btn:active{box-shadow:none;transform:translateY(2px)}
+.govuk-btn--secondary{background:var(--gg1);color:var(--gb);box-shadow:0 2px 0 #929191}
+.govuk-btn--secondary:hover{background:#dbdad9}
+.govuk-btn--warning{background:var(--gr);color:#fff;box-shadow:0 2px 0 #55150b}
+.govuk-btn--blue{background:var(--gbl);color:#fff;box-shadow:0 2px 0 var(--gbld)}
+.govuk-btn--blue:hover{background:var(--gbld)}
+.govuk-btn-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.govuk-input{display:block;width:100%;font-size:16px;font-family:arial,sans-serif;padding:6px 8px;border:2px solid var(--gb);background:#fff;color:var(--gb);line-height:1.4}
+.govuk-input:focus{outline:3px solid var(--gy);outline-offset:0;box-shadow:inset 0 0 0 2px var(--gb)}
+.govuk-select{display:block;width:100%;font-size:16px;font-family:arial,sans-serif;padding:6px 8px;border:2px solid var(--gb);background:#fff;color:var(--gb)}
+.govuk-select:focus{outline:3px solid var(--gy);outline-offset:0}
+.govuk-form-group{margin-bottom:18px}
+.govuk-label{display:block;font-size:16px;font-weight:700;color:var(--gb);margin-bottom:4px}
+.notif-banner{border:5px solid;margin-bottom:20px}
+.notif-banner--success{border-color:var(--gg)}
+.notif-banner--info{border-color:var(--gbl)}
+.notif-banner--error{border-color:var(--gr)}
+.notif-banner__header{padding:5px 12px}
+.notif-banner__header--success{background:var(--gg)}
+.notif-banner__header--info{background:var(--gbl)}
+.notif-banner__header--error{background:var(--gr)}
+.notif-banner__title{font-size:13px;font-weight:700;color:#fff;margin:0;text-transform:uppercase;letter-spacing:0.5px}
+.notif-banner__body{padding:12px;background:#fff}
+.notif-banner__heading{font-size:18px;font-weight:700;color:var(--gb);margin:0 0 4px}
+.notif-banner__text{font-size:14px;color:var(--gb)}
+.inset{border-left:5px solid var(--gbd);padding:12px 14px;background:#fff;margin:0 0 16px}
+.inset--green{border-color:var(--gg);background:#f0f7f4}
+.inset--blue{border-color:var(--gbl);background:#f0f4fb}
+.inset--yellow{border-color:var(--gy);background:var(--tyl-bg)}
+.inset--red{border-color:var(--gr);background:#fdf1f0}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px}
+.stat-card{background:#fff;border:1px solid var(--gbd);padding:16px;border-top:4px solid var(--gbd)}
+.stat-card--green{border-top-color:var(--gg)}
+.stat-card--blue{border-top-color:var(--gbl)}
+.stat-card--orange{border-top-color:var(--gor)}
+.stat-card--red{border-top-color:var(--gr)}
+.stat-card__label{font-size:13px;color:var(--gg3);margin-bottom:6px;line-height:1.3}
+.stat-card__value{font-size:32px;font-weight:700;color:var(--gb);line-height:1;margin-bottom:6px}
+.stat-card__sub{font-size:12px;color:var(--gg3);line-height:1.4}
+.delta--up{color:var(--gg);font-weight:700}
+.session-card{background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbd);padding:14px 16px;margin-bottom:10px}
+.session-card--active{border-left-color:var(--gg)}
+.session-card--open{border-left-color:var(--gbl)}
+.session-card--closed{border-left-color:var(--gg2)}
+.session-card__venue{font-size:17px;font-weight:700;color:var(--gb);margin-bottom:4px}
+.session-card__meta{font-size:13px;color:var(--gg3);display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;align-items:center}
+.session-card__footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.voice-box{background:#fff;border:1px solid var(--gbd);padding:20px;margin-bottom:24px}
+.voice-waveform{height:48px;background:var(--gg1);border:1px solid var(--gbd);display:flex;align-items:center;justify-content:center;padding:0 12px;gap:3px;margin:12px 0}
+.wbar{width:3px;background:var(--gg2);border-radius:1px;transition:height 0.15s,background 0.15s;height:6px}
+.wbar.a{background:var(--gbl)}
+.parsed-grid{display:none;border:1px solid var(--gbd);background:#fff;margin:14px 0}
+.parsed-grid.show{display:block}
+.parsed-row{display:flex;border-bottom:1px solid var(--gbd)}
+.parsed-row:last-child{border-bottom:none}
+.parsed-k{padding:10px 14px;background:var(--gg1);font-weight:700;color:var(--gb);flex:0 0 35%;font-size:14px}
+.parsed-v{padding:10px 14px;color:var(--gb);flex:1;font-size:14px}
+.deri-box{background:#fff;border:1px solid var(--gbd);padding:20px;margin-bottom:24px}
+.deri-result{display:none}
+.deri-result.show{display:block}
+.report-card{background:#fff;border:1px solid var(--gbd);padding:18px;margin-bottom:14px}
+.report-card__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px}
+.report-preview{display:none;margin-top:14px;padding:14px;background:var(--gg1);border:1px solid var(--gbd);font-family:monospace;font-size:13px;color:var(--gg3);line-height:1.8;white-space:pre;overflow-x:auto}
+.report-preview.show{display:block}
+.progress-bar{height:6px;background:var(--gg1);border:1px solid var(--gbd);margin-top:6px}
+.progress-fill{height:100%;background:var(--gbl);transition:width 0.3s}
+.toggle{width:38px;height:22px;background:var(--gg2);cursor:pointer;position:relative;border:2px solid var(--gb);transition:background 0.2s;flex-shrink:0;display:inline-block}
+.toggle.on{background:var(--gg)}
+.toggle-knob{width:14px;height:14px;background:#fff;position:absolute;top:2px;left:2px;transition:left 0.2s}
+.toggle.on .toggle-knob{left:18px}
+.dna-toggle-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+.filter-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;align-items:flex-end}
+.filter-row label{font-size:14px;font-weight:700;color:var(--gb);display:block;margin-bottom:4px}
+.filter-row .govuk-select{font-size:14px;padding:5px 8px;width:auto}
+.chart-wrap{background:#fff;border:1px solid var(--gbd);padding:16px;margin-bottom:24px}
+.chart-legend-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px;font-size:13px;color:var(--gg3)}
+.leg-item{display:flex;align-items:center;gap:6px}
+.leg-sq{width:12px;height:12px;flex-shrink:0}
+.panel{display:none}
+.panel.active{display:block}
+.screen{display:none}
+.screen.active{display:block}
+.hl{outline:4px solid var(--gy) !important;outline-offset:3px !important}
+/* Login */
+.login-outer{background:var(--gg1);min-height:100vh;display:flex;flex-direction:column}
+.login-main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:48px 20px}
+.login-card{background:#fff;border:1px solid var(--gbd);padding:32px;width:100%;max-width:420px}
+.ms-btn{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;border:2px solid var(--gbd);background:#fff;cursor:pointer;font-size:16px;font-family:arial,sans-serif;color:var(--gb);margin-bottom:14px}
+.ms-btn:hover{border-color:var(--gb);background:#fafafa}
+.ms-btn:focus{outline:3px solid var(--gy);outline-offset:0}
+.ms-logo{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:20px;height:20px;flex-shrink:0}
+.ms-sq{border-radius:1px}
+.divider-line{text-align:center;margin:18px 0;position:relative;font-size:13px;color:var(--gg3)}
+.divider-line::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--gbd)}
+.divider-line span{background:#fff;padding:0 12px;position:relative}
+.wcag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.wcag-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 8px;background:var(--tgn-bg);color:var(--tgn-tx)}
+.gvk-footer{border-top:6px solid var(--gb);padding:24px 20px;background:var(--gg1);font-size:14px;color:var(--gg3)}
+.gvk-footer__inner{max-width:1200px;margin:0 auto}
+.gvk-footer__links{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px}
+.gvk-footer__link{color:var(--gg3);text-decoration:underline}
+/* Location manager */
+.loc-table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px}
+.loc-th{padding:10px 12px;background:var(--gb);color:#fff;text-align:left;font-size:13px;font-weight:700}
+.loc-td{padding:10px 12px;border-bottom:1px solid var(--gbd);vertical-align:middle;background:#fff;font-size:14px;color:var(--gb)}
+.loc-td:first-child{font-weight:700}
+.del-btn{font-size:12px;padding:4px 10px;border:2px solid var(--gr);background:#fff;color:var(--gr);cursor:pointer;font-family:arial,sans-serif;font-weight:700}
+.del-btn:hover{background:var(--trd-bg)}
+.del-btn:focus{outline:3px solid var(--gy)}
+.add-form{background:#fff;border:1px solid var(--gbd);padding:20px;margin-bottom:20px}
+.add-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.loc-count{background:var(--tbl-bg);color:var(--tbl-tx);font-size:13px;font-weight:700;padding:3px 10px;display:inline-block}
+@media(max-width:640px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .govuk-h1{font-size:24px}
+  .govuk-h2{font-size:20px}
+  .filter-row{flex-direction:column;gap:10px}
+  .filter-row .govuk-select{width:100%}
+  .session-card__footer{flex-direction:column;align-items:flex-start}
+  .report-card__header{flex-direction:column}
+  .add-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="screen active" id="scr-login">
+  <div class="login-outer">
+    <header style="background:var(--gb);border-bottom:10px solid var(--gbl);padding:12px 20px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="background:#fff;color:var(--gb);font-size:10px;font-weight:900;padding:2px 5px">GOV</div>
+        <span style="color:#fff;font-size:18px;font-weight:700">Dorset Council</span>
+        <span style="color:rgba(255,255,255,0.65);font-size:13px;margin-left:8px;padding-left:8px;border-left:1px solid rgba(255,255,255,0.25)">Digital Inclusion Platform</span>
+      </div>
+    </header>
+    <div class="login-main">
+      <div class="login-card">
+        <h1 style="font-size:24px;font-weight:700;color:var(--gb);margin:0 0 6px">Sign in</h1>
+        <p style="font-size:14px;color:var(--gg3);margin:0 0 22px">Use your Dorset Council Microsoft 365 account. Access is managed by <strong style="color:var(--gb)">Microsoft Entra ID</strong> and restricted to authorised staff and champions.</p>
+        <button class="ms-btn" onclick="doLogin()" id="ms-login-btn">
+          <div class="ms-logo">
+            <div class="ms-sq" style="background:#f25022"></div>
+            <div class="ms-sq" style="background:#7fba00"></div>
+            <div class="ms-sq" style="background:#00a4ef"></div>
+            <div class="ms-sq" style="background:#ffb900"></div>
+          </div>
+          <span>Sign in with Microsoft</span>
+        </button>
+        <div class="divider-line"><span>Dorset Council tenant only</span></div>
+        <div class="inset inset--blue" style="margin-bottom:18px">
+          <p style="font-size:13px;color:var(--gb);margin:0"><strong>Secure access:</strong> Authentication via <strong>OpenID Connect / Microsoft Entra ID</strong>. No data processed outside Dorset Council infrastructure.</p>
+        </div>
+        <div class="govuk-form-group" style="margin-bottom:10px">
+          <label class="govuk-label" for="login-role" style="font-size:14px">Select your role</label>
+          <select class="govuk-select" id="login-role" style="font-size:14px">
+            <option value="volunteer">Volunteer / Community Champion</option>
+            <option value="edc">Embedded Digital Champion (EDC)</option>
+            <option value="manager">Project Support / Team Leader</option>
+          </select>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gbd)">
+          <p style="font-size:12px;font-weight:700;color:var(--gg3);margin-bottom:8px">Compliance &amp; accessibility</p>
+          <div class="wcag-row">
+            <span class="wcag-badge">&#10003; WCAG 2.1 AA</span>
+            <span class="wcag-badge">&#10003; GOV.UK Design System</span>
+            <span class="wcag-badge">&#10003; UK GDPR</span>
+            <span class="wcag-badge">&#10003; ISO 27001</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer style="border-top:1px solid var(--gbd);padding:16px 20px;background:var(--gg1);font-size:13px;color:var(--gg3)">
+      <div style="max-width:420px;margin:0 auto">Dorset Council &copy; 2026 &bull; <a href="#" style="color:var(--gg3)">Accessibility</a> &bull; <a href="#" style="color:var(--gg3)">Privacy</a> &bull; <a href="#" style="color:var(--gg3)">Cookies</a></div>
+    </footer>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="screen" id="scr-app">
+  <a href="#main-content" class="skip">Skip to main content</a>
+
+  <header class="gvk-header" role="banner">
+    <div class="gvk-header__inner">
+      <a class="gvk-header__logo" href="#" aria-label="Dorset Council Digital Inclusion Platform">
+        <div style="background:#fff;color:var(--gb);font-size:10px;font-weight:900;padding:2px 5px">GOV</div>
+        <span class="gvk-header__org">Dorset Council</span>
+        <span class="gvk-header__product">Digital Inclusion Platform</span>
+      </a>
+      <div class="gvk-header__user">
+        <span id="hdr-role-label">Champion</span>
+        <span>|</span>
+        <a onclick="startTour()" role="button" tabindex="0" style="cursor:pointer">Guided tour</a>
+        <span>|</span>
+        <a onclick="logout()" role="button" tabindex="0" style="cursor:pointer">Sign out</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="phase-banner">
+    <div class="phase-banner__inner">
+      <span class="govuk-tag govuk-tag--blue">BETA</span>
+      <span>This is a new service — your <a class="phase-link" href="#">feedback</a> will help us improve it.</span>
+      <span style="margin-left:auto;font-size:13px;color:var(--gg3)">Last M365 sync: <strong style="color:var(--gg)">2 min ago</strong></span>
+    </div>
+  </div>
+
+  <div id="tour-bar" style="display:none">
+    <div class="tour-bar">
+      <span class="tour-bar__step" id="tour-step-text">Step 1 of 5</span>
+      <div class="tour-bar__controls">
+        <button class="tour-bar__btn" onclick="tourPrev()">&#8249; Back</button>
+        <button class="tour-bar__btn" onclick="tourNext()" id="tour-next-btn">Next &#8250;</button>
+        <button class="tour-bar__btn" onclick="endTour()">&#x2715;</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="breadcrumb" aria-label="Breadcrumbs">
+    <div class="breadcrumb__inner">
+      <ol>
+        <li><a href="#">Dorset Council</a></li>
+        <li><a href="#">Digital Inclusion</a></li>
+        <li aria-current="page" id="bc-current">Field App</li>
+      </ol>
+    </div>
+  </nav>
+
+  <div class="module-nav" role="navigation" aria-label="Module navigation">
+    <div class="module-nav__inner">
+      <button class="module-tab active" onclick="switchModule('field',this)" id="tab-field" aria-selected="true" role="tab">Field App</button>
+      <button class="module-tab" onclick="switchModule('cmd',this)" id="tab-cmd" aria-selected="false" role="tab">Command Centre</button>
+      <button class="module-tab" onclick="switchModule('locs',this)" id="tab-locs" aria-selected="false" role="tab" style="display:none">Location Manager</button>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <div class="main">
+
+      <!-- FIELD APP -->
+      <div class="panel active" id="panel-field">
+        <p class="govuk-caption">Volunteer &amp; EDC Interface</p>
+        <h1 class="govuk-h1">Unified Booking Hub</h1>
+        <p class="govuk-body-s" style="margin-bottom:20px">Live session schedules across all 3 Dorset booking zones sourced from Microsoft Bookings. Green border = active session, blue = open slot available to claim. Source: <a href="https://www.dorsetcouncil.gov.uk/w/volunteer-digital-champions" style="color:var(--gbl)">Dorset Council Digital Champion Sessions</a>.</p>
+        <div class="filter-row">
+          <div>
+            <label for="zone-sel">Filter by zone</label>
+            <select class="govuk-select" id="zone-sel" onchange="filterZone()" style="font-size:14px;width:auto">
+              <option value="all">All zones</option>
+              <option value="purbeck">Purbeck &amp; East Dorset</option>
+              <option value="south">South, West &amp; Central Dorset</option>
+              <option value="north">North Dorset</option>
+            </select>
+          </div>
+          <div>
+            <label for="date-sel">Date</label>
+            <select class="govuk-select" id="date-sel" style="font-size:14px;width:auto">
+              <option>26 June 2026 (today)</option>
+              <option>27 June 2026 (tomorrow)</option>
+              <option>30 June 2026</option>
+            </select>
+          </div>
+        </div>
+        <div id="booking-list" aria-live="polite"></div>
+
+        <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
+        <h2 class="govuk-h2" id="logger-section">AI Post-Session Logger</h2>
+        <p class="govuk-body-s">Record your session notes verbally. The AI NLP pipeline extracts structured KPIs and saves them to the Council SharePoint List via Microsoft Graph API.</p>
+        <div class="voice-box" id="voice-box">
+          <h3 style="font-size:16px;font-weight:700;color:var(--gb);margin-bottom:6px">Voice recorder <span class="govuk-tag govuk-tag--blue" style="font-size:11px;vertical-align:middle;margin-left:6px">AI NLP</span></h3>
+          <span class="govuk-hint">Press record, speak your session notes, then stop to trigger AI parsing.</span>
+          <div class="voice-waveform" id="waveform" aria-hidden="true">
+            <div class="wbar"></div><div class="wbar" style="height:12px"></div><div class="wbar"></div><div class="wbar" style="height:18px"></div><div class="wbar" style="height:10px"></div><div class="wbar" style="height:24px"></div><div class="wbar" style="height:14px"></div><div class="wbar"></div><div class="wbar" style="height:20px"></div><div class="wbar" style="height:16px"></div><div class="wbar" style="height:10px"></div><div class="wbar" style="height:28px"></div><div class="wbar"></div><div class="wbar" style="height:14px"></div><div class="wbar" style="height:22px"></div>
+          </div>
+          <div style="min-height:60px;padding:10px;background:var(--gg1);border:1px solid var(--gbd);font-size:14px;color:var(--gg3);font-style:italic;margin-bottom:14px" id="voice-transcript" aria-live="polite">Press "Start recording" below or load the sample session to see the AI parser in action.</div>
+          <div class="govuk-btn-group" style="margin-bottom:12px">
+            <button class="govuk-btn govuk-btn--blue" onclick="toggleMic()" id="mic-btn" style="font-size:14px;padding:7px 14px">Start recording</button>
+            <button class="govuk-btn govuk-btn--secondary" onclick="loadSample()" style="font-size:14px;padding:7px 14px">Load sample session</button>
+          </div>
+          <div class="parsed-grid" id="parsed-grid" aria-live="polite">
+            <div class="parsed-row"><div class="parsed-k">Duration</div><div class="parsed-v" id="pv-dur">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">Location</div><div class="parsed-v" id="pv-loc">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">EDS framework category</div><div class="parsed-v" id="pv-eds">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">Outcome</div><div class="parsed-v" id="pv-out">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">Referral source</div><div class="parsed-v" id="pv-ref">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">DERI risk flag</div><div class="parsed-v" id="pv-deri">—</div></div>
+          </div>
+          <div id="save-area" style="display:none">
+            <button class="govuk-btn" onclick="saveSP()" id="save-btn" style="font-size:14px;padding:7px 14px">Save to Council SharePoint List</button>
+          </div>
+          <div id="save-confirm" style="display:none">
+            <div class="notif-banner notif-banner--success">
+              <div class="notif-banner__header notif-banner__header--success"><p class="notif-banner__title">Success</p></div>
+              <div class="notif-banner__body"><p class="notif-banner__heading">Session log saved</p><p class="notif-banner__text">Record <strong>SL-2847</strong> created in <code>session_impact_logs</code> SharePoint List — synced to Dataverse.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
+        <h2 class="govuk-h2" id="deri-section">Digital Doorway — Device Verification</h2>
+        <p class="govuk-body-s">Run a Digital Exclusion Risk Index (DERI) eligibility check before allocating a device from the Digital Doorway programme.</p>
+        <div class="deri-box" id="deri-box">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="d-ward">Resident ward</label>
+            <span class="govuk-hint">Select the resident's ward to assess DERI baseline score</span>
+            <select class="govuk-select" id="d-ward">
+              <option value="">Select ward...</option>
+              <option value="h">Allendale — DERI score 8.2 (High)</option>
+              <option value="h">Bere Regis — DERI score 7.9 (High)</option>
+              <option value="m">Christchurch East — DERI score 5.1 (Medium)</option>
+              <option value="l">Bournemouth Central — DERI score 2.4 (Low)</option>
+              <option value="h">Shaftesbury — DERI score 8.7 (High)</option>
+              <option value="h">Crossways — DERI score 7.4 (High)</option>
+              <option value="h">Portland — DERI score 8.1 (High)</option>
+              <option value="h">Weymouth West — DERI score 7.6 (High)</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="d-econ">Economic status</label>
+              <select class="govuk-select" id="d-econ">
+                <option value="">Select...</option>
+                <option value="h">Universal Credit recipient</option>
+                <option value="h">Pension Credit only</option>
+                <option value="m">Low income (&lt;£20k)</option>
+                <option value="l">Employed (£25k+)</option>
+              </select>
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="d-conn">Connectivity</label>
+              <select class="govuk-select" id="d-conn">
+                <option value="">Select...</option>
+                <option value="h">No internet access</option>
+                <option value="h">Mobile data only</option>
+                <option value="m">Slow broadband (&lt;10Mbps)</option>
+                <option value="l">Standard broadband</option>
+              </select>
+            </div>
+          </div>
+          <div class="govuk-form-group" style="margin-top:16px">
+            <label class="govuk-label" for="d-dev">Device ownership</label>
+            <select class="govuk-select" id="d-dev">
+              <option value="">Select...</option>
+              <option value="h">No devices at all</option>
+              <option value="h">Shared household device only</option>
+              <option value="l">Owns personal device</option>
+            </select>
+          </div>
+          <button class="govuk-btn govuk-btn--blue" onclick="runDeri()" style="font-size:14px;padding:7px 14px">Run eligibility check</button>
+          <div class="deri-result" id="deri-eligible">
+            <div class="notif-banner notif-banner--success" style="margin-top:14px">
+              <div class="notif-banner__header notif-banner__header--success"><p class="notif-banner__title">Eligible</p></div>
+              <div class="notif-banner__body"><p class="notif-banner__heading">DERI threshold met — eligible for Digital Doorway device</p><p class="notif-banner__text">Resident qualifies under the Digital Exclusion Risk Index combined score threshold. Proceed to assign from the available device registry.</p></div>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="dev-select">Select available device</label>
+              <select class="govuk-select" id="dev-select">
+                <option>Tablet (DD-TAB-0042) — Samsung Galaxy Tab A8 — Available</option>
+                <option>SIM Card (DD-SIM-0118) — 12GB/month — Available</option>
+                <option>MiFi Hub (DD-MFI-0009) — 4G Portable Router — Available</option>
+              </select>
+            </div>
+            <button class="govuk-btn" onclick="assignDev()" style="font-size:14px;padding:7px 14px">Assign and log to Dataverse</button>
+            <div id="dev-confirm" style="display:none;margin-top:12px">
+              <div class="inset inset--green"><p style="font-size:14px;color:var(--gb);margin:0"><strong>Device assigned.</strong> <code>digital_doorway_inventory</code> record created in Dataverse. Status set to <strong>Loaned</strong>.</p></div>
+            </div>
+          </div>
+          <div class="deri-result" id="deri-ineligible">
+            <div class="inset inset--yellow" style="margin-top:14px"><p style="font-size:14px;color:var(--gb);margin:0"><strong>DERI score below threshold.</strong> Resident does not meet combined eligibility criteria. Consider signposting to the Dorset Digital Hotline: <strong>01305 221048</strong>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMAND CENTRE -->
+      <div class="panel" id="panel-cmd">
+        <p class="govuk-caption">Project Support &amp; Leadership Team</p>
+        <h1 class="govuk-h1">Command Centre</h1>
+        <p class="govuk-body-s" style="margin-bottom:20px">County-wide network monitoring. Data sourced from Microsoft Bookings, SharePoint Lists, and Dataverse via Graph API.</p>
+        <div class="filter-row">
+          <div>
+            <label for="rpt-period">Reporting period</label>
+            <select class="govuk-select" id="rpt-period" onchange="updateKPIs()" style="font-size:14px;width:auto">
+              <option value="monthly">Monthly (June 2026)</option>
+              <option value="quarterly">Quarterly (Q2 2026)</option>
+              <option value="annually">Annual (FY 2025/26)</option>
+            </select>
+          </div>
+          <div>
+            <label for="rpt-zone">Booking zone</label>
+            <select class="govuk-select" id="rpt-zone" onchange="updateKPIs()" style="font-size:14px;width:auto">
+              <option value="all">All zones</option>
+              <option value="purbeck">Purbeck &amp; East</option>
+              <option value="south">South, West &amp; Central</option>
+              <option value="north">North Dorset</option>
+            </select>
+          </div>
+        </div>
+        <h2 class="govuk-h2">Key performance indicators</h2>
+        <div class="stat-grid" id="kpi-grid">
+          <div class="stat-card stat-card--green">
+            <div class="stat-card__label">Total support hours delivered</div>
+            <div class="stat-card__value" id="k-hours">1,847</div>
+            <div class="stat-card__sub"><span class="delta--up" id="k-hours-d">&#8593; +12.3% vs last period</span></div>
+          </div>
+          <div class="stat-card stat-card--blue">
+            <div class="stat-card__label">Active champions</div>
+            <div class="stat-card__value" id="k-champs">94</div>
+            <div class="stat-card__sub" id="k-champs-d">58 volunteers &middot; 36 EDCs</div>
+          </div>
+          <div class="stat-card stat-card--orange">
+            <div class="stat-card__label">Hotline referral conversion<br><span style="font-weight:400;font-size:11px">01305 221048 &#8594; bookings</span></div>
+            <div class="stat-card__value" id="k-conv">67%</div>
+            <div class="progress-bar"><div class="progress-fill" id="k-conv-bar" style="width:67%"></div></div>
+          </div>
+          <div class="stat-card stat-card--red">
+            <div class="stat-card__label">Did Not Attend (DNA) rate</div>
+            <div class="stat-card__value" id="k-dna">9.8%</div>
+            <div class="dna-toggle-row">
+              <div class="toggle" id="sms-tog" onclick="toggleSMS()" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle automated SMS reminders"><div class="toggle-knob"></div></div>
+              <span style="font-size:12px;color:var(--gg3)" id="sms-lbl">Auto SMS off</span>
+            </div>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
+        <h2 class="govuk-h2">Essential Digital Skills — framework breakdown</h2>
+        <div class="chart-legend-row">
+          <span class="leg-item"><span class="leg-sq" style="background:#1d70b8"></span> Sessions</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#00703c"></span> Residents reached</span>
+        </div>
+        <div class="chart-wrap"><div style="position:relative;height:260px"><canvas id="eds-chart" role="img" aria-label="EDS bar chart">Device Basics 142/198, Online Safety 87/124, Communication 203/287, Transactions 65/91, Digital Health 178/241, Managing Info 44/62.</canvas></div></div>
+        <h2 class="govuk-h2">Champion network activity — by booking zone</h2>
+        <div class="chart-legend-row">
+          <span class="leg-item"><span class="leg-sq" style="background:#1d70b8"></span> Purbeck &amp; East</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#00703c"></span> South, West &amp; Central</span>
+          <span class="leg-item"><span class="leg-sq" style="background:#f47738"></span> North Dorset</span>
+        </div>
+        <div class="chart-wrap"><div style="position:relative;height:220px"><canvas id="zone-chart" role="img" aria-label="Zone activity line chart">Purbeck: 38,42,39,51,48,55; South: 62,58,71,68,74,80; North: 29,34,31,37,41,44.</canvas></div></div>
+        <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
+        <h2 class="govuk-h2" id="report-section">Compliance &amp; grant report generator</h2>
+        <p class="govuk-body-s">Generate statutory reports for council governance, cabinet briefings, and annual funding audits.</p>
+        <div class="report-card">
+          <div class="report-card__header"><div><span class="govuk-tag govuk-tag--purple">Monthly</span> <strong style="font-size:16px;margin-left:8px">Operations report</strong></div>
+          <div class="govuk-btn-group"><button class="govuk-btn govuk-btn--secondary" onclick="togglePreview('monthly')" style="font-size:13px;padding:5px 12px">Preview</button><button class="govuk-btn" onclick="simDl('monthly',this)" style="font-size:13px;padding:5px 12px">Download .xlsx</button></div></div>
+          <p style="font-size:13px;color:var(--gg3);margin:0">Shift fulfillment, champion hours, DBS expiry alerts, DNA incidents.</p>
+          <div class="report-preview" id="rpt-monthly">MONTHLY OPERATIONS REPORT — JUNE 2026
+Digital Dorset | Dorset Council LA | Ref: DDG-OPS-2026-06
+──────────────────────────────────────────────────
+Shifts scheduled:          196      Shifts fulfilled:   184 (93.9%)
+DNA incidents:             18       Total hours:        612 hrs
+New residents supported:   247      Active locations:   23
+
+DBS EXPIRY ALERTS (next 30 days):
+  • Alice Hennessy    — Wimborne Library        — expires 14 Jul 2026
+  • James Okafor      — Blandford Forum Library  — expires 22 Jul 2026
+  • Sara Whitfield    — Gillingham Library       — expires 29 Jul 2026
+
+Zone breakdown:
+  Purbeck & East (9 locations):      55 sessions
+  South, West & Central (9 locs):   80 sessions
+  North Dorset (5 locations):        44 sessions
+
+Generated: 2026-06-26T09:12:00Z | Dorset Council M365 tenant</div>
+        </div>
+        <div class="report-card">
+          <div class="report-card__header"><div><span class="govuk-tag govuk-tag--turquoise">Quarterly</span> <strong style="font-size:16px;margin-left:8px">Cabinet briefing</strong></div>
+          <div class="govuk-btn-group"><button class="govuk-btn govuk-btn--secondary" onclick="togglePreview('qtr')" style="font-size:13px;padding:5px 12px">Preview</button><button class="govuk-btn" onclick="simDl('qtr',this)" style="font-size:13px;padding:5px 12px">Download .pdf</button></div></div>
+          <p style="font-size:13px;color:var(--gg3);margin:0">Traffic shift from phone to self-service digital, aggregate KPIs for cabinet presentation.</p>
+          <div class="report-preview" id="rpt-qtr">QUARTERLY CABINET BRIEFING — Q2 2026
+Digital Dorset Programme | For Cabinet Review
+──────────────────────────────────────────────────
+Total sessions (Q2):           579      Residents supported:  1,003
+Hotline call deflection:       67%      Cost per intervention: £8.42
+Champion hours (Q2):           1,847    Top EDS category:     Communication
+Digital Doorway devices:       47       Active locations:     23
+
+SELF-SERVICE UPLIFT:
+  Phone contacts avoided (est.): 672
+  Saving vs phone handling:      £14,217 (Q2)
+  Year-on-year uplift:           +23% vs Q2 2025
+
+Prepared by: Digital Skills & Adoption Team | Dorset Council</div>
+        </div>
+        <div class="report-card">
+          <div class="report-card__header"><div><span class="govuk-tag govuk-tag--orange">Annual</span> <strong style="font-size:16px;margin-left:8px">Statutory funding audit</strong></div>
+          <div class="govuk-btn-group"><button class="govuk-btn govuk-btn--secondary" onclick="togglePreview('annual')" style="font-size:13px;padding:5px 12px">Preview</button><button class="govuk-btn" onclick="simDl('annual',this)" style="font-size:13px;padding:5px 12px">Download .csv</button></div></div>
+          <p style="font-size:13px;color:var(--gg3);margin:0">Cost-per-intervention, geographic reach and outcomes for BDUK / DSIT grant auditors.</p>
+          <div class="report-preview" id="rpt-annual">ANNUAL STATUTORY FUNDING AUDIT — FY 2025/26
+Grant ref: BDUK-DD-2025-004 | DSIT Digital Inclusion Fund
+──────────────────────────────────────────────────
+zone,locations,sessions,residents,cost_per_intervention,devices,postcodes
+Purbeck & East,9,487,812,£9.14,18,28
+South West & Central,9,691,1204,£7.83,24,41
+North Dorset,5,371,598,£9.91,15,19
+TOTAL,23,1549,2614,£8.42,57,88
+
+COMPLIANCE: PASSED | Age 65+: 61% | Gender: 58%F/38%M/4%PNS
+Auditor signature required by: 31 Aug 2026</div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
+        <h2 class="govuk-h2">M365 integration blueprint</h2>
+        <details style="margin-bottom:20px">
+          <summary style="cursor:pointer;font-size:16px;font-weight:700;color:var(--gbl);padding:8px 0;list-style:none">&#9660; View technical architecture &amp; data sovereignty statement</summary>
+          <div style="padding:16px;border-left:5px solid var(--gbd);margin-top:8px;background:#fff">
+            <p style="font-size:14px;color:var(--gg3);margin-bottom:14px">Platform operates exclusively within the Dorset Council M365 tenant. No data transits outside council infrastructure.</p>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px">
+              <thead><tr><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Component</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Graph API endpoint</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Data model</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Scope</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:8px;border-bottom:1px solid var(--gbd);background:var(--gg1);font-weight:700">Microsoft Bookings</td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>/solutions/bookingBusinesses</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>booking_appointments</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>Bookings.Read.All</code></td></tr>
+                <tr><td style="padding:8px;border-bottom:1px solid var(--gbd);background:var(--gg1);font-weight:700">SharePoint Lists</td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>/sites/{site-id}/lists</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>session_impact_logs</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>Sites.ReadWrite.All</code></td></tr>
+                <tr><td style="padding:8px;background:var(--gg1);font-weight:700">Dataverse</td><td style="padding:8px;background:#fff"><code>Power Platform API</code></td><td style="padding:8px;background:#fff"><code>digital_doorway_inventory</code></td><td style="padding:8px;background:#fff"><code>Dynamics.ReadWrite.All</code></td></tr>
+              </tbody>
+            </table>
+            <div class="inset inset--blue" style="margin-bottom:0"><p style="font-size:13px;color:var(--gb);margin:0"><strong>Data sovereignty:</strong> All scopes minimally privileged via Entra ID Conditional Access. Compliant with UK GDPR, ISO 27001, and LGA Digital Security Standards. No third-party API keys or external databases.</p></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- LOCATION MANAGER (Project Support only) -->
+      <div class="panel" id="panel-locs">
+        <p class="govuk-caption">Project Support / Team Leader only</p>
+        <h1 class="govuk-h1">Location Manager</h1>
+        <p class="govuk-body-s" style="margin-bottom:4px">Add or remove Dorset library and community hub locations from the booking network. Changes sync to Microsoft Bookings via Graph API. <span id="loc-count-badge" class="loc-count">23 locations</span></p>
+        <p class="govuk-body-s" style="margin-bottom:20px">Source: <a href="https://www.dorsetcouncil.gov.uk/w/volunteer-digital-champions" style="color:var(--gbl)">Dorset Council Digital Champion Sessions</a> &amp; <a href="https://www.dorsetcouncil.gov.uk/libraries-history-culture/libraries/find-your-local-library/dorset-libraries" style="color:var(--gbl)">Find a Dorset Library</a>.</p>
+
+        <div id="loc-confirm" style="display:none;margin-bottom:16px"></div>
+
+        <div class="add-form">
+          <h2 class="govuk-h2" style="font-size:18px;margin-bottom:14px">Add new location</h2>
+          <div class="add-grid">
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-name" style="font-size:14px">Location name</label>
+              <input class="govuk-input" id="new-name" type="text" placeholder="e.g. Beaminster Library" style="font-size:14px">
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-zone" style="font-size:14px">Booking zone</label>
+              <select class="govuk-select" id="new-zone" style="font-size:14px">
+                <option value="purbeck">Purbeck &amp; East Dorset</option>
+                <option value="south">South, West &amp; Central Dorset</option>
+                <option value="north">North Dorset</option>
+              </select>
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-day" style="font-size:14px">Session day</label>
+              <select class="govuk-select" id="new-day" style="font-size:14px">
+                <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+                <option>Thursday</option><option>Friday</option><option>Saturday</option>
+              </select>
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-time" style="font-size:14px">Session time</label>
+              <input class="govuk-input" id="new-time" type="text" placeholder="e.g. 10:00am – 12:00pm" style="font-size:14px">
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-champ" style="font-size:14px">Assigned champion</label>
+              <input class="govuk-input" id="new-champ" type="text" placeholder="e.g. Sarah Makepeace" style="font-size:14px">
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="new-type" style="font-size:14px">Champion type</label>
+              <select class="govuk-select" id="new-type" style="font-size:14px">
+                <option>Volunteer</option>
+                <option>Embedded Digital Champion (EDC)</option>
+                <option>Workplace Champion</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <button class="govuk-btn" onclick="addLocation()" style="font-size:14px;padding:7px 16px">Add location</button>
+          </div>
+        </div>
+
+        <div class="filter-row" style="margin-bottom:14px">
+          <div>
+            <label for="loc-zone-filter">Filter by zone</label>
+            <select class="govuk-select" id="loc-zone-filter" onchange="renderLocTable()" style="font-size:14px;width:auto">
+              <option value="all">All zones</option>
+              <option value="purbeck">Purbeck &amp; East</option>
+              <option value="south">South, West &amp; Central</option>
+              <option value="north">North Dorset</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="loc-table" id="loc-table" aria-label="Digital champion locations">
+            <thead>
+              <tr>
+                <th class="loc-th">Location</th>
+                <th class="loc-th">Zone</th>
+                <th class="loc-th">Session</th>
+                <th class="loc-th">Champion</th>
+                <th class="loc-th">Type</th>
+                <th class="loc-th">Action</th>
+              </tr>
+            </thead>
+            <tbody id="loc-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="gvk-footer" role="contentinfo">
+    <div class="gvk-footer__inner">
+      <div class="gvk-footer__links">
+        <a class="gvk-footer__link" href="#">Accessibility statement</a>
+        <a class="gvk-footer__link" href="#">Privacy notice</a>
+        <a class="gvk-footer__link" href="#">Cookies</a>
+        <a class="gvk-footer__link" href="#">Contact Digital Skills Team</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="wcag-badge">WCAG 2.1 AA</span>
+        <span class="wcag-badge">GOV.UK Design System</span>
+        <span class="gvk-footer__copy">&copy; Dorset Council 2026. Digital Transformation Team. v1.5.0</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ── Shared location data (real Dorset Council libraries from dorsetcouncil.gov.uk) ── */
+let locations = [
+  /* Purbeck & East Dorset */
+  {id:1,name:'Swanage Library',zone:'purbeck',day:'Thursday',time:'10:00am – 12:00pm',champion:'Helen Price',type:'Volunteer'},
+  {id:2,name:'Wareham Library',zone:'purbeck',day:'Wednesday',time:'2:00pm – 4:00pm',champion:'Tom Ridout',type:'Volunteer'},
+  {id:3,name:'Wimborne Library',zone:'purbeck',day:'Monday',time:'10:00am – 12:00pm',champion:'Alice Hennessy',type:'Volunteer'},
+  {id:4,name:'Ferndown Library',zone:'purbeck',day:'Tuesday',time:'10:00am – 12:00pm',champion:'Derek Shaw',type:'Volunteer'},
+  {id:5,name:'Verwood Library',zone:'purbeck',day:'Friday',time:'10:00am – 12:00pm',champion:'Claire Moss',type:'Volunteer'},
+  {id:6,name:'Christchurch Library',zone:'purbeck',day:'Wednesday',time:'10:00am – 12:00pm',champion:'Rajan Patel',type:'Embedded Digital Champion (EDC)'},
+  {id:7,name:'Highcliffe Library',zone:'purbeck',day:'Tuesday (1st & 2nd)',time:'10:30am – 1:00pm',champion:'Sue Whitmore',type:'Volunteer'},
+  {id:8,name:'Southbourne Library',zone:'purbeck',day:'Tuesday (fortnightly)',time:'4:30pm – 5:30pm',champion:'Mike Farrow',type:'Volunteer'},
+  {id:9,name:'Upton Library',zone:'purbeck',day:'Thursday',time:'2:00pm – 4:00pm',champion:'Linda Barnes',type:'Volunteer'},
+  /* South, West & Central Dorset */
+  {id:10,name:'Dorchester Library',zone:'south',day:'Monday & Wednesday',time:'10:00am – 12:00pm',champion:'Priya Kapoor',type:'Embedded Digital Champion (EDC)'},
+  {id:11,name:'Weymouth Library',zone:'south',day:'Tuesday & Thursday',time:'10:00am – 12:00pm',champion:'Gary Simmons',type:'Embedded Digital Champion (EDC)'},
+  {id:12,name:'Bridport Library',zone:'south',day:'Wednesday',time:'10:00am – 12:00pm',champion:'Fiona Carr',type:'Volunteer'},
+  {id:13,name:'Lyme Regis Library',zone:'south',day:'Friday',time:'10:00am – 12:00pm',champion:'Nigel Ward',type:'Volunteer'},
+  {id:14,name:'Portland Library',zone:'south',day:'Monday',time:'2:00pm – 4:00pm',champion:'Sarah Makepeace',type:'Volunteer'},
+  {id:15,name:'Chickerell Community Library',zone:'south',day:'Saturday',time:'10:00am – 12:00pm',champion:'Paul Jefferies',type:'Volunteer'},
+  {id:16,name:'Littlemoor Library',zone:'south',day:'Wednesday',time:'10:15am – 1:00pm',champion:'Anne Trott',type:'Volunteer'},
+  {id:17,name:'Wyke Regis Library',zone:'south',day:'Wednesday',time:'2:15pm – 5:15pm',champion:'Chris Lane',type:'Volunteer'},
+  {id:18,name:'Sherborne Library',zone:'south',day:'Thursday',time:'10:00am – 12:00pm',champion:'Deborah Mills',type:'Embedded Digital Champion (EDC)'},
+  /* North Dorset */
+  {id:19,name:'Gillingham Library',zone:'north',day:'Thursday & Saturday',time:'Thu 10:30am–12:30pm / Sat 10:00am–1:00pm',champion:'James Okafor',type:'Volunteer'},
+  {id:20,name:'Shaftesbury Library',zone:'north',day:'Wednesday',time:'10:00am – 12:00pm',champion:'Ruth Collins',type:'Volunteer'},
+  {id:21,name:'Blandford Forum Library',zone:'north',day:'Tuesday',time:'10:00am – 12:00pm',champion:'Mark Hudson',type:'Volunteer'},
+  {id:22,name:'Sturminster Newton Learning Centre',zone:'north',day:'Monday & Wednesday',time:'Mon 9:30am–1:00pm / Wed 9:30am–4:30pm',champion:'Karen Fields',type:'Embedded Digital Champion (EDC)'},
+  {id:23,name:'Beaminster Library',zone:'north',day:'Friday',time:'10:00am – 12:00pm',champion:'Paul Stokes',type:'Volunteer'},
+];
+let nextId = 24;
+
+const zoneNames={purbeck:'Purbeck & East Dorset',south:'South, West & Central Dorset',north:'North Dorset'};
+const zoneTagClass={purbeck:'govuk-tag--purple',south:'govuk-tag--turquoise',north:'govuk-tag--orange'};
+
+/* ── Booking sessions (field app — uses locations) ── */
+let bookings = [
+  {id:'B001',locId:10,date:'26 Jun 2026',status:'active',vol:'Priya Kapoor',ref:'01305 221048'},
+  {id:'B002',locId:1, date:'26 Jun 2026',status:'open',vol:null,ref:'Self-referral'},
+  {id:'B003',locId:21,date:'26 Jun 2026',status:'active',vol:'Mark Hudson',ref:'GP referral'},
+  {id:'B004',locId:6, date:'26 Jun 2026',status:'open',vol:null,ref:'01305 221048'},
+  {id:'B005',locId:3, date:'26 Jun 2026',status:'closed',vol:'Alice Hennessy',ref:'Walk-in'},
+  {id:'B006',locId:20,date:'27 Jun 2026',status:'open',vol:null,ref:'01305 221048'},
+  {id:'B007',locId:11,date:'27 Jun 2026',status:'active',vol:'Gary Simmons',ref:'Job Centre Plus'},
+  {id:'B008',locId:4, date:'27 Jun 2026',status:'open',vol:null,ref:'Self-referral'},
+];
+
+function renderBookings(filter){
+  const list=document.getElementById('booking-list');
+  const items=filter==='all'?bookings:bookings.filter(b=>{const l=locations.find(x=>x.id===b.locId);return l&&l.zone===filter;});
+  if(!items.length){list.innerHTML='<p class="govuk-body-s">No sessions found for this zone.</p>';return;}
+  list.innerHTML=items.map(b=>{
+    const loc=locations.find(x=>x.id===b.locId)||{name:'Unknown',zone:'south',time:'—'};
+    const sc='session-card session-card--'+b.status;
+    const tag=b.status==='active'?'<span class="govuk-tag govuk-tag--green">Active</span>':b.status==='open'?'<span class="govuk-tag govuk-tag--blue">Open slot</span>':'<span class="govuk-tag govuk-tag--grey">Closed</span>';
+    const action=b.status==='open'?`<button class="govuk-btn govuk-btn--blue" onclick="claim('${b.id}')" style="font-size:13px;padding:5px 12px;margin:0">Claim slot</button>`:`<span style="font-size:13px;color:var(--gg3)">${b.vol?'Champion: '+b.vol:'—'}</span>`;
+    return`<div class="${sc}">
+      <div class="session-card__venue">${loc.name}</div>
+      <div class="session-card__meta">
+        <span>${b.date} &bull; ${loc.time}</span>
+        <span class="govuk-tag ${zoneTagClass[loc.zone]||'govuk-tag--grey'}" style="font-size:11px">${zoneNames[loc.zone]||loc.zone}</span>
+        <span>Referral: ${b.ref}</span>
+      </div>
+      <div class="session-card__footer">${tag}${action}</div>
+    </div>`;
+  }).join('');
+}
+renderBookings('all');
+
+function filterZone(){renderBookings(document.getElementById('zone-sel').value);}
+function claim(id){const b=bookings.find(x=>x.id===id);if(b){b.status='active';b.vol='You (current user)';filterZone();}}
+
+/* ── Voice logger ── */
+let micState='idle',waveTimer;
+const sampleVoice='Just finished my session at Christchurch Library with a resident referred via the Digital Hotline. We spent 45 minutes resetting her email password and showing her how to book a repeat prescription via the NHS App. She lives in Christchurch East ward and is on Pension Credit with no home broadband.';
+function toggleMic(){
+  const btn=document.getElementById('mic-btn');const tx=document.getElementById('voice-transcript');
+  if(micState==='idle'){
+    micState='recording';btn.textContent='Stop recording';btn.className='govuk-btn govuk-btn--warning';
+    tx.textContent='Recording... speak your session notes clearly.';startWave();
+    document.getElementById('parsed-grid').classList.remove('show');
+    document.getElementById('save-area').style.display='none';document.getElementById('save-confirm').style.display='none';
+  } else if(micState==='recording'){
+    micState='processing';stopWave();btn.textContent='Processing...';btn.disabled=true;
+    tx.innerHTML='<em>AI NLP pipeline parsing your session notes...</em>';
+    setTimeout(()=>processVoice(),1500);
+  }
+}
+function loadSample(){
+  document.getElementById('voice-transcript').innerHTML='<em>"'+sampleVoice+'"</em>';
+  setTimeout(()=>processVoice(),600);
+}
+function processVoice(){
+  const btn=document.getElementById('mic-btn');micState='idle';btn.textContent='Start new recording';btn.disabled=false;btn.className='govuk-btn govuk-btn--blue';
+  document.getElementById('pv-dur').textContent='45 minutes';
+  document.getElementById('pv-loc').textContent='Christchurch Library';
+  document.getElementById('pv-eds').innerHTML='<span class="govuk-tag govuk-tag--blue" style="font-size:11px">Communication</span> <span class="govuk-tag govuk-tag--turquoise" style="font-size:11px">Digital Health / NHS App</span>';
+  document.getElementById('pv-out').textContent='Successful — NHS App prescription booking & password reset';
+  document.getElementById('pv-ref').textContent='Digital Hotline (01305 221048)';
+  document.getElementById('pv-deri').innerHTML='<span class="govuk-tag govuk-tag--yellow" style="font-size:11px">DERI flagged</span> Pension Credit, no broadband';
+  document.getElementById('parsed-grid').classList.add('show');document.getElementById('save-area').style.display='block';
+}
+function saveSP(){const btn=document.getElementById('save-btn');btn.textContent='Saving...';btn.disabled=true;setTimeout(()=>{document.getElementById('save-area').style.display='none';document.getElementById('save-confirm').style.display='block';},1200);}
+function startWave(){const bars=document.querySelectorAll('.wbar');waveTimer=setInterval(()=>{bars.forEach(b=>{b.style.height=Math.round(4+Math.random()*32)+'px';b.className='wbar a';});},130);}
+function stopWave(){clearInterval(waveTimer);document.querySelectorAll('.wbar').forEach(b=>{b.style.height='6px';b.className='wbar';});}
+
+/* ── DERI ── */
+function runDeri(){
+  const w=document.getElementById('d-ward').value,e=document.getElementById('d-econ').value,c=document.getElementById('d-conn').value,d=document.getElementById('d-dev').value;
+  if(!w||!e||!c||!d){alert('Please complete all four fields before running the eligibility check.');return;}
+  const el=(w==='h'||e==='h')&&c==='h'&&d==='h';
+  document.getElementById('deri-eligible').className='deri-result'+(el?' show':'');
+  document.getElementById('deri-ineligible').className='deri-result'+(!el?' show':'');
+  document.getElementById('dev-confirm').style.display='none';
+}
+function assignDev(){document.getElementById('dev-confirm').style.display='block';}
+
+/* ── Module switching ── */
+function switchModule(mod,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.module-tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
+  document.getElementById('panel-'+mod).classList.add('active');
+  el.classList.add('active');el.setAttribute('aria-selected','true');
+  const labels={field:'Field App',cmd:'Command Centre',locs:'Location Manager'};
+  document.getElementById('bc-current').textContent=labels[mod]||mod;
+  if(mod==='cmd'&&!edsChart)setTimeout(buildCharts,60);
+  if(mod==='locs')renderLocTable();
+}
+
+/* ── KPI & charts ── */
+function toggleSMS(){const t=document.getElementById('sms-tog');const on=t.classList.toggle('on');t.setAttribute('aria-checked',String(on));document.getElementById('sms-lbl').textContent=on?'Auto SMS active':'Auto SMS off';}
+const kpiData={
+  monthly:{hours:'1,847',champs:'94',conv:'67',dna:'9.8%',hd:'&#8593; +12.3% vs last period',cd:'58 volunteers &middot; 36 EDCs'},
+  quarterly:{hours:'5,241',champs:'94',conv:'64',dna:'10.1%',hd:'&#8593; +8.7% vs Q1 2026',cd:'58 volunteers &middot; 36 EDCs'},
+  annually:{hours:'18,940',champs:'107',conv:'61',dna:'11.2%',hd:'&#8593; +21.4% vs FY 24/25',cd:'64 volunteers &middot; 43 EDCs'},
+};
+const edsDs={
+  monthly:{s:[142,87,203,65,178,44],r:[198,124,287,91,241,62]},
+  quarterly:{s:[389,241,571,187,503,129],r:[541,338,798,261,694,181]},
+  annually:{s:[1547,982,2283,742,2011,518],r:[2156,1374,3192,1043,2779,724]},
+};
+function updateKPIs(){
+  const p=document.getElementById('rpt-period').value;const d=kpiData[p]||kpiData.monthly;
+  document.getElementById('k-hours').textContent=d.hours;document.getElementById('k-hours-d').innerHTML=d.hd;
+  document.getElementById('k-champs').textContent=d.champs;document.getElementById('k-champs-d').innerHTML=d.cd;
+  document.getElementById('k-conv').textContent=d.conv+'%';document.getElementById('k-conv-bar').style.width=d.conv+'%';
+  document.getElementById('k-dna').textContent=d.dna;
+  if(edsChart){const ed=edsDs[p]||edsDs.monthly;edsChart.data.datasets[0].data=ed.s;edsChart.data.datasets[1].data=ed.r;edsChart.update();}
+}
+let edsChart,zoneChart;
+function buildCharts(){
+  edsChart=new Chart(document.getElementById('eds-chart').getContext('2d'),{type:'bar',data:{labels:['Device basics','Online safety','Communication','Transactions','Digital health\n/ NHS App','Managing\ninformation'],datasets:[{label:'Sessions',data:[142,87,203,65,178,44],backgroundColor:'#1d70b8'},{label:'Residents',data:[198,124,287,91,241,62],backgroundColor:'#00703c'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11},autoSkip:false,maxRotation:25},grid:{display:false}},y:{ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.07)'}}}}});
+  zoneChart=new Chart(document.getElementById('zone-chart').getContext('2d'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Purbeck',data:[38,42,39,51,48,55],borderColor:'#1d70b8',tension:0.3,pointRadius:3,borderDash:[]},{label:'South',data:[62,58,71,68,74,80],borderColor:'#00703c',tension:0.3,pointRadius:3,borderDash:[5,3]},{label:'North',data:[29,34,31,37,41,44],borderColor:'#f47738',tension:0.3,pointRadius:3,borderDash:[2,2]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.07)'}}}}});
+}
+function togglePreview(id){document.getElementById('rpt-'+id).classList.toggle('show');}
+function simDl(id,btn){const o=btn.innerHTML;btn.textContent='Generating...';btn.disabled=true;setTimeout(()=>{btn.textContent='Downloaded ✓';setTimeout(()=>{btn.innerHTML=o;btn.disabled=false;},2000);},1400);}
+
+/* ── Location Manager ── */
+function renderLocTable(){
+  const filter=document.getElementById('loc-zone-filter').value;
+  const list=filter==='all'?locations:locations.filter(l=>l.zone===filter);
+  const tbody=document.getElementById('loc-tbody');
+  if(!list.length){tbody.innerHTML='<tr><td class="loc-td" colspan="6" style="color:var(--gg3);font-style:italic">No locations in this zone.</td></tr>';return;}
+  tbody.innerHTML=list.map(l=>`<tr>
+    <td class="loc-td">${l.name}</td>
+    <td class="loc-td"><span class="govuk-tag ${zoneTagClass[l.zone]||'govuk-tag--grey'}" style="font-size:11px">${zoneNames[l.zone]||l.zone}</span></td>
+    <td class="loc-td" style="font-size:13px">${l.day}<br><span style="color:var(--gg3)">${l.time}</span></td>
+    <td class="loc-td" style="font-size:13px">${l.champion}</td>
+    <td class="loc-td" style="font-size:13px">${l.type}</td>
+    <td class="loc-td"><button class="del-btn" onclick="deleteLocation(${l.id},'${l.name.replace(/'/g,"\\'")}')">Remove</button></td>
+  </tr>`).join('');
+  document.getElementById('loc-count-badge').textContent=locations.length+' location'+(locations.length!==1?'s':'');
+}
+
+function addLocation(){
+  const name=document.getElementById('new-name').value.trim();
+  const zone=document.getElementById('new-zone').value;
+  const day=document.getElementById('new-day').value;
+  const time=document.getElementById('new-time').value.trim();
+  const champ=document.getElementById('new-champ').value.trim();
+  const type=document.getElementById('new-type').value;
+  if(!name){alert('Please enter a location name.');return;}
+  if(!time){alert('Please enter a session time.');return;}
+  locations.push({id:nextId++,name,zone,day,time,champion:champ||'TBC',type});
+  document.getElementById('new-name').value='';document.getElementById('new-time').value='';document.getElementById('new-champ').value='';
+  showLocConfirm('success','Location added','<strong>'+name+'</strong> has been added to the '+zoneNames[zone]+' zone and synced to Microsoft Bookings.');
+  renderLocTable();
+}
+
+function deleteLocation(id,name){
+  if(!confirm('Remove "'+name+'" from the booking network?\n\nThis will delete the location from Microsoft Bookings and all future sessions will be cancelled.'))return;
+  locations=locations.filter(l=>l.id!==id);
+  bookings=bookings.filter(b=>b.locId!==id);
+  showLocConfirm('error','Location removed','<strong>'+name+'</strong> has been removed. All associated upcoming sessions have been cancelled in Microsoft Bookings.');
+  renderLocTable();
+  renderBookings(document.getElementById('zone-sel').value);
+}
+
+function showLocConfirm(type,heading,text){
+  const el=document.getElementById('loc-confirm');
+  const cls=type==='success'?'success':'error';
+  el.innerHTML=`<div class="notif-banner notif-banner--${cls}"><div class="notif-banner__header notif-banner__header--${cls}"><p class="notif-banner__title">${type==='success'?'Success':'Removed'}</p></div><div class="notif-banner__body"><p class="notif-banner__heading">${heading}</p><p class="notif-banner__text">${text}</p></div></div>`;
+  el.style.display='block';setTimeout(()=>{el.style.display='none';},5000);
+}
+
+/* ── Login / logout ── */
+let currentRole='volunteer';
+function doLogin(){
+  const btn=document.getElementById('ms-login-btn');
+  currentRole=document.getElementById('login-role').value;
+  btn.textContent='Authenticating with Microsoft Entra ID...';btn.disabled=true;
+  const labels={volunteer:'Volunteer / Community Champion',edc:'Embedded Digital Champion',manager:'Project Support / Team Leader'};
+  setTimeout(()=>{
+    document.getElementById('scr-login').classList.remove('active');
+    document.getElementById('scr-app').classList.add('active');
+    document.getElementById('hdr-role-label').textContent=labels[currentRole]||'Champion';
+    /* Project Support / Team Leader: all three tabs. Volunteers & EDCs: Field App only */
+    const isManager=currentRole==='manager';
+    document.getElementById('tab-cmd').style.display=isManager?'':'none';
+    document.getElementById('tab-locs').style.display=isManager?'':'none';
+    switchModule('field',document.getElementById('tab-field'));
+  },1800);
+}
+function logout(){
+  document.getElementById('scr-app').classList.remove('active');
+  document.getElementById('scr-login').classList.add('active');
+  document.getElementById('ms-login-btn').textContent='Sign in with Microsoft';
+  document.getElementById('ms-login-btn').disabled=false;
+  edsChart=null;zoneChart=null;
+  switchModule('field',document.getElementById('tab-field'));
+}
+
+/* ── Guided tour ── */
+const tourSteps=[
+  {text:'Step 1 of 6 — The Unified Booking Hub shows all 23 real Dorset library and hub locations across 3 zones. Green = active, blue = open to claim.',target:'booking-list'},
+  {text:'Step 2 of 6 — Filter sessions by zone using the dropdown. Purbeck & East, South West & Central, and North Dorset are all covered.',target:'zone-sel'},
+  {text:'Step 3 of 6 — The AI Voice Logger extracts structured EDS framework KPIs from your spoken notes. Click "Load sample session" to try it.',target:'voice-box'},
+  {text:'Step 4 of 6 — Command Centre KPIs update dynamically by reporting period and zone. The DNA rate toggle activates automated SMS reminders.',target:'kpi-grid'},
+  {text:'Step 5 of 6 — Generate monthly, quarterly and annual compliance reports for council governance and grant auditors.',target:'report-section'},
+  {text:'Step 6 of 6 — Project Support users see a Location Manager tab to add or remove libraries from the booking network in real time.',target:'tab-locs'},
+];
+let tourIdx=0;
+function startTour(){tourIdx=0;document.getElementById('tour-bar').style.display='block';showTourStep();}
+function showTourStep(){
+  document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));
+  const s=tourSteps[tourIdx];document.getElementById('tour-step-text').textContent=s.text;
+  if(tourIdx>=3)switchModule('cmd',document.getElementById('tab-cmd'));
+  else switchModule('field',document.getElementById('tab-field'));
+  const t=document.getElementById(s.target);if(t){t.classList.add('hl');t.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  document.getElementById('tour-next-btn').textContent=tourIdx===tourSteps.length-1?'Finish ›':'Next ›';
+}
+function tourNext(){if(tourIdx<tourSteps.length-1){tourIdx++;showTourStep();}else{endTour();}}
+function tourPrev(){if(tourIdx>0){tourIdx--;showTourStep();}}
+function endTour(){document.getElementById('tour-bar').style.display='none';document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));}
+</script>
+</body>
+</html>
