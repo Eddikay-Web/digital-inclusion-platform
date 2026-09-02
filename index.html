@@ -223,6 +223,55 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
 .cal-code{background:#2d2d2d;color:#f8f8f2;padding:16px;font-family:monospace;font-size:12px;overflow-x:auto;line-height:1.7;white-space:pre}
 .cal-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 @media(max-width:600px){.cal-compare{grid-template-columns:1fr}.attend-card{flex-direction:column;align-items:flex-start}}
+/* ── Volunteer Management ── */
+.vol-card{background:#fff;border:1px solid var(--gbd);padding:16px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.vol-card__name{font-weight:700;font-size:15px;margin-bottom:4px}
+.vol-card__meta{font-size:13px;color:var(--gg3);line-height:1.7}
+.vol-card__badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dbs-ok{background:var(--tgn-bg);color:var(--tgn-tx);padding:3px 8px;font-size:11px;font-weight:700}
+.dbs-warn{background:var(--tyl-bg);color:#594d00;padding:3px 8px;font-size:11px;font-weight:700}
+.dbs-exp{background:var(--trd-bg);color:var(--trd-tx);padding:3px 8px;font-size:11px;font-weight:700}
+.training-pip{display:inline-block;background:var(--tbl-bg);color:var(--tbl-tx);padding:2px 7px;font-size:11px;font-weight:700;margin:2px}
+.hours-bar-wrap{background:var(--gg1);height:8px;margin-top:6px;width:100%;max-width:200px}
+.hours-bar{background:var(--gbl);height:8px}
+/* ── Resident Profiles ── */
+.res-card{background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbl);padding:16px;margin-bottom:10px}
+.res-card__name{font-weight:700;font-size:15px;margin-bottom:4px}
+.res-card__meta{font-size:13px;color:var(--gg3);line-height:1.8}
+.skill-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.skill-label{min-width:120px;color:var(--gg3)}
+.skill-bar-wrap{flex:1;background:var(--gg1);height:10px;max-width:200px}
+.skill-bar-pre{background:var(--gg2);height:10px}
+.skill-bar-post{background:var(--gg);height:10px}
+.skill-score{font-weight:700;font-size:12px;min-width:24px}
+.progress-legend{display:flex;gap:16px;font-size:12px;margin-bottom:10px}
+.progress-legend span{display:flex;align-items:center;gap:5px}
+.progress-legend .dot{width:10px;height:10px;display:inline-block}
+/* ── Referral Network ── */
+.ref-card{background:#fff;border:1px solid var(--gbd);padding:14px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.ref-card__info{flex:1;min-width:180px}
+.ref-card__name{font-weight:700;font-size:15px;margin-bottom:4px}
+.ref-card__meta{font-size:13px;color:var(--gg3);line-height:1.7}
+.ref-card__actions{display:flex;flex-direction:column;gap:6px;min-width:140px}
+.status-pending{background:var(--tyl-bg);color:#594d00}
+.status-booked{background:var(--tbl-bg);color:var(--tbl-tx)}
+.status-attended{background:var(--tgn-bg);color:var(--tgn-tx)}
+.status-dna{background:var(--trd-bg);color:var(--trd-tx)}
+/* ── Device Inventory ── */
+.dev-inv-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gg1);flex-wrap:wrap;font-size:13px}
+.dev-inv-row:last-child{border-bottom:none}
+.dev-inv-id{font-family:monospace;font-size:12px;color:var(--gg3);min-width:120px}
+.dev-inv-name{font-weight:600;flex:1}
+.dev-status-avail{color:var(--gg);font-weight:700}
+.dev-status-loan{color:var(--gbl);font-weight:700}
+.dev-status-ret{color:var(--gg3);font-weight:700}
+/* ── Skills Assessment ── */
+.skill-assess-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:600px){.skill-assess-grid{grid-template-columns:1fr}}
+.skill-q{font-size:14px;font-weight:600;margin-bottom:8px}
+.skill-options{display:flex;gap:8px;flex-wrap:wrap}
+.skill-opt{border:2px solid var(--gbd);padding:6px 12px;font-size:13px;cursor:pointer;background:#fff;font-family:arial,sans-serif}
+.skill-opt.sel{border-color:var(--gbl);background:var(--gbl);color:#fff}
 </style>
 </head>
 <body>
@@ -335,6 +384,9 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
       <button class="module-tab" onclick="switchModule('cmd',this)" id="tab-cmd" aria-selected="false" role="tab">Command Centre</button>
       <button class="module-tab" onclick="switchModule('locs',this)" id="tab-locs" aria-selected="false" role="tab" style="display:none">Location Manager</button>
       <button class="module-tab" onclick="switchModule('book',this)" id="tab-book" aria-selected="false" role="tab">Bookings</button>
+      <button class="module-tab" onclick="switchModule('volunteers',this)" id="tab-volunteers" aria-selected="false" role="tab" style="display:none">Volunteers</button>
+      <button class="module-tab" onclick="switchModule('residents',this)" id="tab-residents" aria-selected="false" role="tab" style="display:none">Residents</button>
+      <button class="module-tab" onclick="switchModule('referrals',this)" id="tab-referrals" aria-selected="false" role="tab" style="display:none">Referrals</button>
     </div>
   </div>
 
@@ -936,6 +988,151 @@ Auditor signature required by: 31 Aug 2026</div>
         </div>
       </div>
 
+      <!-- VOLUNTEER MANAGEMENT -->
+      <div class="panel" id="panel-volunteers">
+        <p class="govuk-caption">Project Support / Team Leader only</p>
+        <h1 class="govuk-h1">Volunteer Management</h1>
+        <p class="govuk-body-s" style="margin-bottom:20px">Manage all volunteers and Embedded Digital Champions — DBS status, training records, session hours, and availability. DBS alerts fire automatically 60 days before expiry.</p>
+
+        <div id="vol-dbs-alert" style="background:var(--trd-bg);border-left:4px solid var(--gr);padding:12px 16px;margin-bottom:20px">
+          <p style="font-weight:700;color:var(--trd-tx);margin-bottom:4px">&#9888; DBS Expiry Alert</p>
+          <p id="vol-dbs-msg" style="font-size:14px;color:var(--trd-tx);margin:0"></p>
+        </div>
+
+        <div class="filter-row" style="margin-bottom:16px">
+          <div><label for="vol-filter-type">Filter by type</label>
+            <select class="govuk-select" id="vol-filter-type" onchange="renderVolunteers()" style="font-size:14px;width:auto">
+              <option value="all">All champions</option>
+              <option value="Volunteer">Volunteers only</option>
+              <option value="EDC">EDCs only</option>
+            </select>
+          </div>
+          <div><label for="vol-filter-dbs">DBS status</label>
+            <select class="govuk-select" id="vol-filter-dbs" onchange="renderVolunteers()" style="font-size:14px;width:auto">
+              <option value="all">All statuses</option>
+              <option value="ok">Valid</option>
+              <option value="expiring">Expiring soon</option>
+              <option value="expired">Expired</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Add volunteer form -->
+        <div class="add-form" style="margin-bottom:20px">
+          <h2 class="govuk-h2" style="font-size:17px;margin-bottom:14px">Add new champion</h2>
+          <div class="add-grid">
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Full name</label><input class="govuk-input" id="nv-name" type="text" placeholder="e.g. Sarah Makepeace"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Email</label><input class="govuk-input" id="nv-email" type="email" placeholder="e.g. sarah@email.com"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Phone</label><input class="govuk-input" id="nv-phone" type="tel" placeholder="07700 000000"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Type</label>
+              <select class="govuk-select" id="nv-type" style="font-size:14px"><option value="Volunteer">Volunteer</option><option value="EDC">EDC</option></select></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Assigned location</label>
+              <select class="govuk-select" id="nv-loc" style="font-size:14px"></select></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">DBS number</label><input class="govuk-input" id="nv-dbs" type="text" placeholder="e.g. DBS-2026-001"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">DBS expiry date</label><input class="govuk-input" id="nv-dbsexp" type="date" style="font-size:14px"></div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:10px">
+            <button class="govuk-btn" onclick="addVolunteer()" style="font-size:14px;padding:7px 16px">Add champion</button>
+          </div>
+          <div id="vol-add-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Champion added and DBS tracking activated.</div>
+        </div>
+
+        <div id="vol-list"></div>
+      </div>
+
+      <!-- RESIDENT PROFILES -->
+      <div class="panel" id="panel-residents">
+        <p class="govuk-caption">Resident Journey Tracker</p>
+        <h1 class="govuk-h1">Resident Profiles</h1>
+        <p class="govuk-body-s" style="margin-bottom:20px">Track each resident's digital skills journey across multiple sessions. Pre and post skills assessments measure real progress and generate evidence for funders.</p>
+
+        <div class="filter-row" style="margin-bottom:16px">
+          <div><label for="res-search">Search</label>
+            <input class="govuk-input" id="res-search" type="text" placeholder="Name or postcode..." oninput="renderResidents()" style="font-size:14px;max-width:220px"></div>
+          <div><label for="res-filter-status">Status</label>
+            <select class="govuk-select" id="res-filter-status" onchange="renderResidents()" style="font-size:14px;width:auto">
+              <option value="all">All residents</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed programme</option>
+              <option value="dna">Did not return</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="res-list"></div>
+
+        <!-- Skills assessment modal -->
+        <div id="res-assess-panel" style="display:none;background:#fff;border:2px solid var(--gbl);padding:20px;margin-top:16px">
+          <h2 class="govuk-h2" style="font-size:18px;margin-bottom:4px">Skills Assessment</h2>
+          <p class="govuk-body-s" id="res-assess-name" style="margin-bottom:16px"></p>
+          <p class="govuk-body-s" style="margin-bottom:16px">Rate the resident's confidence in each area (1 = no confidence, 5 = fully independent):</p>
+          <div class="skill-assess-grid">
+            <div><div class="skill-q">Laptop / device basics</div><div class="skill-options" id="sa-device"></div></div>
+            <div><div class="skill-q">Online safety & passwords</div><div class="skill-options" id="sa-safety"></div></div>
+            <div><div class="skill-q">Communication (email, video calls)</div><div class="skill-options" id="sa-comms"></div></div>
+            <div><div class="skill-q">NHS App & digital health</div><div class="skill-options" id="sa-health"></div></div>
+            <div><div class="skill-q">Benefits & government services</div><div class="skill-options" id="sa-govt"></div></div>
+            <div><div class="skill-q">Online shopping & transactions</div><div class="skill-options" id="sa-trans"></div></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button class="govuk-btn" onclick="saveAssessment()" style="font-size:14px;padding:7px 16px">Save assessment</button>
+            <button class="govuk-btn govuk-btn--secondary" onclick="document.getElementById('res-assess-panel').style.display='none'" style="font-size:14px;padding:7px 16px">Cancel</button>
+          </div>
+          <div id="assess-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Assessment saved. Progress scores updated.</div>
+        </div>
+      </div>
+
+      <!-- REFERRAL NETWORK -->
+      <div class="panel" id="panel-referrals">
+        <p class="govuk-caption">Project Support / Team Leader only</p>
+        <h1 class="govuk-h1">Referral Network</h1>
+        <p class="govuk-body-s" style="margin-bottom:20px">Incoming referrals from GPs, Job Centre Plus, Age UK, housing associations, and social prescribing link workers. Assign each referral to a session and track through to attendance.</p>
+
+        <!-- Summary row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px" id="ref-summary-row"></div>
+
+        <!-- New referral form -->
+        <div class="add-form" style="margin-bottom:20px">
+          <h2 class="govuk-h2" style="font-size:17px;margin-bottom:14px">Log new referral</h2>
+          <div class="add-grid">
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Resident name</label><input class="govuk-input" id="nr-name" type="text" placeholder="Full name"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Phone</label><input class="govuk-input" id="nr-phone" type="tel" placeholder="07700 000000"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Postcode</label><input class="govuk-input" id="nr-postcode" type="text" style="max-width:130px" placeholder="DT1 1AZ"></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Referral source</label>
+              <select class="govuk-select" id="nr-source" style="font-size:14px">
+                <option>GP / Health centre</option><option>Job Centre Plus</option><option>Age UK</option>
+                <option>Social prescribing link worker</option><option>Housing association</option>
+                <option>NHS trust</option><option>Digital Hotline (01305 221048)</option><option>Self-referral</option>
+              </select></div>
+            <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Referred by (name/org)</label><input class="govuk-input" id="nr-by" type="text" placeholder="e.g. Dr A. Patel, Dorchester HC"></div>
+            <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1"><label class="govuk-label" style="font-size:14px">Digital need</label>
+              <select class="govuk-select" id="nr-need" style="font-size:14px">
+                <option>NHS App (appointments, prescriptions)</option><option>Universal Credit online account</option>
+                <option>Email setup</option><option>Video calls — family contact</option>
+                <option>Online banking</option><option>Government services (DWP, DVLA, HMRC)</option>
+                <option>Laptop basics — new device given</option><option>General digital confidence</option>
+              </select></div>
+          </div>
+          <div style="margin-top:14px">
+            <button class="govuk-btn" onclick="addReferral()" style="font-size:14px;padding:7px 16px">Log referral</button>
+          </div>
+          <div id="ref-add-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Referral logged. Assign to a session below.</div>
+        </div>
+
+        <div class="filter-row" style="margin-bottom:14px">
+          <div><label for="ref-filter">Status</label>
+            <select class="govuk-select" id="ref-filter" onchange="renderReferrals()" style="font-size:14px;width:auto">
+              <option value="all">All referrals</option>
+              <option value="pending">Pending — not yet booked</option>
+              <option value="booked">Booked into session</option>
+              <option value="attended">Attended</option>
+              <option value="dna">Did not attend</option>
+            </select>
+          </div>
+        </div>
+        <div id="ref-list"></div>
+      </div>
+
     </div>
   </main>
 
@@ -1080,11 +1277,14 @@ function switchModule(mod,el){
   document.querySelectorAll('.module-tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
   document.getElementById('panel-'+mod).classList.add('active');
   el.classList.add('active');el.setAttribute('aria-selected','true');
-  const labels={field:'Field App',cmd:'Command Centre',locs:'Location Manager',book:'Booking System'};
+  const labels={field:'Field App',cmd:'Command Centre',locs:'Location Manager',book:'Booking System',volunteers:'Volunteer Management',residents:'Resident Profiles',referrals:'Referral Network'};
   document.getElementById('bc-current').textContent=labels[mod]||mod;
   if(mod==='cmd'&&!edsChart)setTimeout(buildCharts,60);
   if(mod==='locs')renderLocTable();
   if(mod==='book'){renderPubSessions();}
+  if(mod==='volunteers')renderVolunteers();
+  if(mod==='residents')renderResidents();
+  if(mod==='referrals'){renderReferrals();renderRefSummary();}
 }
 
 /* ── KPI & charts ── */
@@ -1180,6 +1380,10 @@ function doLogin(){
     document.getElementById('tab-locs').style.display=isManager?'':'none';
     document.getElementById('bkt-manage').style.display=isManager?'':'none';
     document.getElementById('bk-data-notice').style.display=isManager?'block':'none';
+    document.getElementById('tab-volunteers').style.display=isManager?'':'none';
+    document.getElementById('tab-residents').style.display=isManager?'':'none';
+    document.getElementById('tab-referrals').style.display=isManager?'':'none';
+    if(isManager){renderVolunteers();renderResidents();renderReferrals();renderRefSummary();}
     switchModule('field',document.getElementById('tab-field'));
   },1800);
 }
@@ -1404,6 +1608,256 @@ function deleteSession(id){
   residentBookings=residentBookings.filter(r=>r.sessionId!==id);
   renderMgrSessions();renderPubSessions();
 }
+
+/* ══════════════════════════════════════════════════════════
+   VOLUNTEER MANAGEMENT
+══════════════════════════════════════════════════════════ */
+let volunteers=[
+  {id:'V001',name:'Sarah Makepeace',type:'Volunteer',email:'sarah.m@gmail.com',phone:'07700 900001',location:'Dorchester Library',dbs:'DBS-2024-001',dbsExpiry:'2026-11-15',training:['Device Setup','Online Safety','NHS App'],hoursLog:[{date:'2026-08-05',hrs:3,session:'NHS App drop-in'},{date:'2026-08-12',hrs:3,session:'Device basics'},{date:'2026-08-19',hrs:4,session:'UC online'}],active:true},
+  {id:'V002',name:'Michael Donovan',type:'EDC',email:'m.donovan@dorset.gov.uk',phone:'07700 900002',location:'Weymouth JobCentre',dbs:'DBS-2024-002',dbsExpiry:'2026-10-03',training:['Device Setup','Online Safety','NHS App','Benefits & DWP','Universal Credit'],hoursLog:[{date:'2026-08-06',hrs:5,session:'UC drop-in'},{date:'2026-08-13',hrs:5,session:'Benefits surgery'},{date:'2026-08-20',hrs:5,session:'HMRC self-assessment'}],active:true},
+  {id:'V003',name:'Linda Park',type:'Volunteer',email:'lindapark77@hotmail.com',phone:'07700 900003',location:'Bridport Library',dbs:'DBS-2023-099',dbsExpiry:'2026-09-12',training:['Device Setup','Online Safety'],hoursLog:[{date:'2026-08-07',hrs:2,session:'Laptop basics'},{date:'2026-08-21',hrs:2,session:'Email setup'}],active:true},
+  {id:'V004',name:'James Acheampong',type:'EDC',email:'j.acheampong@nhs.net',phone:'07700 900004',location:'Dorchester Health Centre',dbs:'DBS-2025-011',dbsExpiry:'2028-01-20',training:['Device Setup','Online Safety','NHS App','Video Calls'],hoursLog:[{date:'2026-08-04',hrs:4,session:'NHS App clinic'},{date:'2026-08-11',hrs:4,session:'NHS App clinic'}],active:true},
+  {id:'V005',name:'Ruth Osei',type:'Volunteer',email:'ruthosei@yahoo.co.uk',phone:'07700 900005',location:'Blandford Library',dbs:'DBS-2022-055',dbsExpiry:'2025-07-01',training:['Device Setup'],hoursLog:[],active:false},
+];
+
+function dbsStatus(expStr){
+  const exp=new Date(expStr),now=new Date(),days=Math.round((exp-now)/(86400000));
+  if(days<0)return{cls:'dbs-exp',label:'Expired'};
+  if(days<=60)return{cls:'dbs-warn',label:'Expiring in '+days+'d'};
+  return{cls:'dbs-ok',label:'Valid'};
+}
+function totalHours(v){return v.hoursLog.reduce((a,h)=>a+h.hrs,0);}
+
+function renderVolunteers(){
+  const ft=document.getElementById('vol-filter-type')?document.getElementById('vol-filter-type').value:'all';
+  const fd=document.getElementById('vol-filter-dbs')?document.getElementById('vol-filter-dbs').value:'all';
+  let list=volunteers.filter(v=>{
+    if(ft!=='all'&&v.type!==ft)return false;
+    const s=dbsStatus(v.dbsExpiry).cls;
+    if(fd==='ok'&&s!=='dbs-ok')return false;
+    if(fd==='expiring'&&s!=='dbs-warn')return false;
+    if(fd==='expired'&&s!=='dbs-exp')return false;
+    return true;
+  });
+  const el=document.getElementById('vol-list');
+  if(!el)return;
+  // DBS alert
+  const expiring=volunteers.filter(v=>dbsStatus(v.dbsExpiry).cls!=='dbs-ok');
+  const alertEl=document.getElementById('vol-dbs-alert');
+  if(alertEl){
+    if(expiring.length){
+      alertEl.style.display='block';
+      document.getElementById('vol-dbs-msg').textContent=expiring.map(v=>v.name+' — '+dbsStatus(v.dbsExpiry).label).join(' | ');
+    } else {alertEl.style.display='none';}
+  }
+  if(!list.length){el.innerHTML='<p class="govuk-body-s">No volunteers match this filter.</p>';return;}
+  el.innerHTML=list.map(v=>{
+    const dbs=dbsStatus(v.dbsExpiry);
+    const hrs=totalHours(v);
+    return `<div class="vol-card">
+      <div>
+        <div class="vol-card__name">${v.name} <span style="font-weight:400;font-size:13px;color:#505a5f">${v.type}</span></div>
+        <div style="font-size:13px;color:#505a5f;margin-bottom:6px">${v.location} &bull; ${v.email} &bull; ${v.phone}</div>
+        <div style="margin-bottom:6px"><span class="${dbs.cls}">${dbs.label}</span>&nbsp;&nbsp;<span style="font-size:12px;color:#505a5f">DBS ${v.dbs} &bull; expires ${v.dbsExpiry}</span></div>
+        <div style="margin-bottom:6px">${v.training.map(t=>'<span class="training-pip">'+t+'</span>').join('')}</div>
+        <div style="font-size:12px;color:#505a5f">Sessions logged: ${v.hoursLog.length} &bull; Total hours: ${hrs}</div>
+      </div>
+      <div style="text-align:right;font-size:13px">
+        <div style="font-size:26px;font-weight:700;color:var(--gbl)">${hrs}</div>
+        <div style="color:#505a5f">hrs</div>
+        <div style="margin-top:8px">${v.active?'<span style="background:var(--tgn-bg);color:var(--tgn-tx);padding:2px 7px;font-size:11px;font-weight:700">ACTIVE</span>':'<span style="background:#dee0e2;color:#0b0c0c;padding:2px 7px;font-size:11px;font-weight:700">INACTIVE</span>'}</div>
+      </div>
+    </div>`;
+  }).join('');
+  // populate location dropdown for add form
+  const locSel=document.getElementById('nv-loc');
+  if(locSel&&locSel.options.length<=1){
+    locations.forEach(l=>{const o=document.createElement('option');o.textContent=l.name;locSel.appendChild(o);});
+  }
+}
+
+function addVolunteer(){
+  const name=document.getElementById('nv-name').value.trim();
+  if(!name){alert('Please enter a name.');return;}
+  const newVol={
+    id:'V'+String(volunteers.length+1).padStart(3,'0'),
+    name,type:document.getElementById('nv-type').value,
+    email:document.getElementById('nv-email').value,
+    phone:document.getElementById('nv-phone').value,
+    location:document.getElementById('nv-loc').value,
+    dbs:document.getElementById('nv-dbs').value||'Pending',
+    dbsExpiry:document.getElementById('nv-dbsexp').value||new Date(Date.now()+63072e6).toISOString().split('T')[0],
+    training:[],hoursLog:[],active:true
+  };
+  volunteers.push(newVol);
+  ['nv-name','nv-email','nv-phone','nv-dbs','nv-dbsexp'].forEach(id=>document.getElementById(id).value='');
+  const c=document.getElementById('vol-add-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',3000);
+  renderVolunteers();
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESIDENT PROFILES & SKILLS ASSESSMENT
+══════════════════════════════════════════════════════════ */
+let residentProfiles=[
+  {id:'R001',name:'Margaret Holloway',postcode:'DT1 1AZ',phone:'01305 000001',deri:72,status:'active',sessions:3,lastSeen:'2026-08-19',champion:'Sarah Makepeace',need:'NHS App & online health',pre:{device:1,safety:1,comms:1,health:1,govt:1,trans:1},post:{device:3,safety:3,comms:2,health:4,govt:2,trans:1},notes:'Keen learner. Brought granddaughter who helped set up email.'},
+  {id:'R002',name:'Derek Simms',postcode:'DT1 2BB',phone:'01305 000002',deri:81,status:'active',sessions:2,lastSeen:'2026-08-12',champion:'James Acheampong',need:'Universal Credit online account',pre:{device:2,safety:1,comms:1,health:1,govt:1,trans:1},post:{device:3,safety:2,comms:2,health:1,govt:3,trans:1},notes:'Anxious about passwords. Needs follow-up session on 2FA.'},
+  {id:'R003',name:'Betty Frome',postcode:'DT6 3EE',phone:'01308 000003',deri:65,status:'completed',sessions:5,lastSeen:'2026-07-28',champion:'Linda Park',need:'Email setup & video calls',pre:{device:1,safety:1,comms:1,health:1,govt:1,trans:1},post:{device:4,safety:4,comms:5,health:3,govt:2,trans:2},notes:'Completed programme. Now calls her daughter in Australia weekly.'},
+  {id:'R004',name:'Alan Thorne',postcode:'DT11 7GG',phone:'01258 000004',deri:88,status:'dna',sessions:1,lastSeen:'2026-07-14',champion:'Sarah Makepeace',need:'Laptop basics',pre:{device:1,safety:1,comms:1,health:1,govt:1,trans:1},post:{device:1,safety:1,comms:1,health:1,govt:1,trans:1},notes:'Did not return after first session. Phone not reachable.'},
+];
+let assessTarget=null;
+
+function avgScore(obj){const vals=Object.values(obj);return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*10)/10;}
+
+function renderResidents(){
+  const q=(document.getElementById('res-search')||{}).value||'';
+  const fs=(document.getElementById('res-filter-status')||{}).value||'all';
+  let list=residentProfiles.filter(r=>{
+    if(fs!=='all'&&r.status!==fs)return false;
+    if(q&&!r.name.toLowerCase().includes(q.toLowerCase())&&!r.postcode.toLowerCase().includes(q.toLowerCase()))return false;
+    return true;
+  });
+  const el=document.getElementById('res-list');if(!el)return;
+  if(!list.length){el.innerHTML='<p class="govuk-body-s">No residents match this filter.</p>';return;}
+  const skills=['device','safety','comms','health','govt','trans'];
+  const skillLabels=['Devices','Safety','Comms','NHS','Benefits','Transactions'];
+  el.innerHTML=list.map(r=>{
+    const preAvg=avgScore(r.pre),postAvg=avgScore(r.post),gain=Math.round((postAvg-preAvg)*10)/10;
+    const statusMap={active:'<span style="background:var(--tbl-bg);color:var(--tbl-tx);padding:2px 7px;font-size:11px;font-weight:700">ACTIVE</span>',completed:'<span style="background:var(--tgn-bg);color:var(--tgn-tx);padding:2px 7px;font-size:11px;font-weight:700">COMPLETED</span>',dna:'<span style="background:var(--trd-bg);color:var(--trd-tx);padding:2px 7px;font-size:11px;font-weight:700">DID NOT RETURN</span>'};
+    return `<div class="res-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div>
+          <div style="font-weight:700;font-size:15px">${r.name} <span style="font-size:12px;font-weight:400;color:#505a5f">${r.postcode}</span></div>
+          <div style="font-size:13px;color:#505a5f">${r.phone} &bull; Champion: ${r.champion} &bull; ${r.sessions} session${r.sessions!==1?'s':''} &bull; Last seen: ${r.lastSeen}</div>
+          <div style="font-size:13px;margin-top:4px">Need: <strong>${r.need}</strong></div>
+        </div>
+        <div style="text-align:right">
+          ${statusMap[r.status]||r.status}
+          <div style="font-size:12px;color:#505a5f;margin-top:4px">DERI: ${r.deri}</div>
+          ${gain>0?'<div style="font-size:13px;color:var(--gbl);font-weight:700;margin-top:4px">&#8593; +'+gain+' progress score</div>':''}
+        </div>
+      </div>
+      <div style="margin-bottom:10px">
+        ${skills.map((s,i)=>`<div class="skill-row"><span style="width:80px;color:#505a5f">${skillLabels[i]}</span>
+          <div style="flex:1;background:var(--gg1);height:10px;position:relative">
+            <div style="background:var(--gg2);height:10px;width:${r.pre[s]*20}%;position:absolute;top:0;left:0"></div>
+            <div style="background:var(--gbl);height:10px;width:${r.post[s]*20}%;position:absolute;top:0;left:0;opacity:0.7"></div>
+          </div>
+          <span style="width:60px;font-size:11px;color:#505a5f">Pre:${r.pre[s]} Post:${r.post[s]}</span>
+        </div>`).join('')}
+        <div style="font-size:11px;color:#505a5f;margin-top:4px">&#9646; Dark blue = post-assessment &nbsp; &#9646; Light = pre-assessment</div>
+      </div>
+      <div style="font-size:13px;color:#505a5f;margin-bottom:8px;font-style:italic">"${r.notes}"</div>
+      <button class="govuk-btn govuk-btn--secondary" style="font-size:13px;padding:5px 12px" onclick="openAssessment('${r.id}')">Record new assessment</button>
+    </div>`;
+  }).join('');
+}
+
+function openAssessment(rid){
+  assessTarget=residentProfiles.find(r=>r.id===rid);
+  if(!assessTarget)return;
+  document.getElementById('res-assess-name').textContent='Resident: '+assessTarget.name;
+  ['sa-device','sa-safety','sa-comms','sa-health','sa-govt','sa-trans'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=[1,2,3,4,5].map(n=>`<label style="margin-right:8px;font-size:13px"><input type="radio" name="${id}" value="${n}"> ${n}</label>`).join('');
+  });
+  document.getElementById('assess-confirm').style.display='none';
+  document.getElementById('res-assess-panel').style.display='block';
+  document.getElementById('res-assess-panel').scrollIntoView({behavior:'smooth'});
+}
+
+function saveAssessment(){
+  if(!assessTarget)return;
+  const keys={device:'sa-device',safety:'sa-safety',comms:'sa-comms',health:'sa-health',govt:'sa-govt',trans:'sa-trans'};
+  const newPost={};
+  for(const[k,id]of Object.entries(keys)){
+    const sel=document.querySelector(`input[name="${id}"]:checked`);
+    newPost[k]=sel?parseInt(sel.value):assessTarget.post[k];
+  }
+  assessTarget.post=newPost;assessTarget.sessions++;assessTarget.lastSeen=new Date().toISOString().split('T')[0];
+  const c=document.getElementById('assess-confirm');c.style.display='block';setTimeout(()=>{c.style.display='none';document.getElementById('res-assess-panel').style.display='none';renderResidents();},2000);
+}
+
+/* ══════════════════════════════════════════════════════════
+   REFERRAL NETWORK
+══════════════════════════════════════════════════════════ */
+let referrals=[
+  {id:'REF001',name:'Victor Oladele',phone:'07700 911001',postcode:'DT1 3AA',source:'GP / Health centre',referredBy:'Dr A. Patel, Dorchester HC',need:'NHS App (appointments, prescriptions)',status:'attended',sessionAssigned:'Drop-in Dorchester 2026-08-12',date:'2026-08-02'},
+  {id:'REF002',name:'June Whitfield',phone:'07700 911002',postcode:'DT2 7BB',source:'Job Centre Plus',referredBy:'JCP Weymouth — Kate Harris',need:'Universal Credit online account',status:'booked',sessionAssigned:'UC Help Weymouth 2026-09-10',date:'2026-08-20'},
+  {id:'REF003',name:'Roy Bassett',phone:'07700 911003',postcode:'DT6 4CC',source:'Age UK',referredBy:'Age UK Dorset — volunteer',need:'Video calls — family contact',status:'pending',sessionAssigned:null,date:'2026-08-27'},
+  {id:'REF004',name:'Annette Cross',phone:'07700 911004',postcode:'DT11 8DD',source:'Social prescribing link worker',referredBy:'Dorset Healthcare SPLW',need:'General digital confidence',status:'dna',sessionAssigned:'Blandford Basics 2026-08-05',date:'2026-07-29'},
+  {id:'REF005',name:'Patrick Mwamba',phone:'07700 911005',postcode:'DT1 1EE',source:'Housing association',referredBy:'Magna Housing — resident support',need:'Email setup',status:'pending',sessionAssigned:null,date:'2026-08-30'},
+];
+
+const refStatusMap={
+  pending:'<span style="background:#fff3d4;color:#594d00;padding:2px 8px;font-size:11px;font-weight:700">PENDING</span>',
+  booked:'<span style="background:var(--tbl-bg);color:var(--tbl-tx);padding:2px 8px;font-size:11px;font-weight:700">BOOKED</span>',
+  attended:'<span style="background:var(--tgn-bg);color:var(--tgn-tx);padding:2px 8px;font-size:11px;font-weight:700">ATTENDED</span>',
+  dna:'<span style="background:var(--trd-bg);color:var(--trd-tx);padding:2px 8px;font-size:11px;font-weight:700">DID NOT ATTEND</span>',
+};
+
+function renderRefSummary(){
+  const el=document.getElementById('ref-summary-row');if(!el)return;
+  const counts={pending:0,booked:0,attended:0,dna:0};
+  referrals.forEach(r=>counts[r.status]=(counts[r.status]||0)+1);
+  el.innerHTML=[
+    {label:'Total',val:referrals.length,col:'var(--gbl)'},
+    {label:'Pending',val:counts.pending,col:'#c36a00'},
+    {label:'Attended',val:counts.attended,col:'var(--gr)'},
+    {label:'DNA',val:counts.dna,col:'var(--rd)'},
+  ].map(d=>`<div style="background:#fff;border:1px solid var(--gbd);padding:12px 16px;text-align:center">
+    <div style="font-size:28px;font-weight:700;color:${d.col}">${d.val}</div>
+    <div style="font-size:12px;color:#505a5f">${d.label}</div>
+  </div>`).join('');
+}
+
+function renderReferrals(){
+  const ft=(document.getElementById('ref-filter')||{}).value||'all';
+  let list=referrals.filter(r=>ft==='all'||r.status===ft);
+  const el=document.getElementById('ref-list');if(!el)return;
+  if(!list.length){el.innerHTML='<p class="govuk-body-s">No referrals match this filter.</p>';return;}
+  el.innerHTML=list.map(r=>`<div class="ref-card">
+    <div style="flex:1">
+      <div style="font-weight:700;font-size:15px;margin-bottom:4px">${r.name} <span style="font-weight:400;font-size:12px;color:#505a5f">${r.postcode} &bull; ${r.phone}</span></div>
+      <div style="font-size:13px;color:#505a5f;margin-bottom:4px">Source: <strong>${r.source}</strong> &bull; Referred by: ${r.referredBy}</div>
+      <div style="font-size:13px;margin-bottom:6px">Need: <strong>${r.need}</strong></div>
+      <div style="font-size:12px;color:#505a5f">Logged: ${r.date} ${r.sessionAssigned?'&bull; Session: '+r.sessionAssigned:''}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+      ${refStatusMap[r.status]||r.status}
+      ${r.status==='pending'?`<select class="govuk-select" style="font-size:12px;width:auto" onchange="assignReferral('${r.id}',this.value)">
+        <option value="">Assign to session…</option>
+        ${sessions.map(s=>`<option value="${s.topic} ${s.date}">${s.topic} ${s.date}</option>`).join('')}
+      </select>`:''}
+    </div>
+  </div>`).join('');
+}
+
+function assignReferral(id,session){
+  if(!session)return;
+  const ref=referrals.find(r=>r.id===id);
+  if(ref){ref.sessionAssigned=session;ref.status='booked';}
+  renderReferrals();renderRefSummary();
+}
+
+function addReferral(){
+  const name=document.getElementById('nr-name').value.trim();
+  if(!name){alert('Please enter a resident name.');return;}
+  const newRef={
+    id:'REF'+String(referrals.length+1).padStart(3,'0'),
+    name,phone:document.getElementById('nr-phone').value,
+    postcode:document.getElementById('nr-postcode').value,
+    source:document.getElementById('nr-source').value,
+    referredBy:document.getElementById('nr-by').value,
+    need:document.getElementById('nr-need').value,
+    status:'pending',sessionAssigned:null,
+    date:new Date().toISOString().split('T')[0]
+  };
+  referrals.push(newRef);
+  ['nr-name','nr-phone','nr-postcode','nr-by'].forEach(id=>document.getElementById(id).value='');
+  const c=document.getElementById('ref-add-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',3000);
+  renderReferrals();renderRefSummary();
+}
+
 </script>
 </body>
 </html>
