@@ -306,9 +306,8 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
         <div class="govuk-form-group" style="margin-bottom:10px">
           <label class="govuk-label" for="login-role" style="font-size:14px">Select your role</label>
           <select class="govuk-select" id="login-role" style="font-size:14px">
-            <option value="volunteer">Volunteer / Community Champion</option>
-            <option value="edc">Embedded Digital Champion (EDC)</option>
-            <option value="manager">Project Support / Team Leader</option>
+            <option value="volunteer">Volunteer Digital Champion</option>
+            <option value="manager">Project Support Officer</option>
           </select>
         </div>
         <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gbd)">
@@ -852,6 +851,98 @@ Auditor signature required by: 31 Aug 2026</div>
         </div>
       </div>
 
+      <!-- DEVICE ALLOCATION (inside Bookings panel, Project Support only) -->
+      <div id="device-alloc-section" style="display:none;margin-top:32px;border-top:2px solid var(--gbd);padding-top:24px">
+        <h2 class="govuk-h2" style="font-size:20px;margin-bottom:6px">Digital Doorway — Device Allocation</h2>
+        <p class="govuk-body-s" style="margin-bottom:20px">Run a DERI eligibility check before allocating a device to a resident. Laptops and tablets are from the Digital Doorway programme. SIM cards are from the Volunteer Digital Champion network. All allocations are logged to Dataverse.</p>
+        <div class="deri-box" id="deri-box">
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="d-ward">Resident ward</label>
+            <span class="govuk-hint">Select the resident's ward to assess DERI baseline score</span>
+            <select class="govuk-select" id="d-ward">
+              <option value="">Select ward...</option>
+              <option value="h">Allendale — DERI score 8.2 (High)</option>
+              <option value="h">Bere Regis — DERI score 7.9 (High)</option>
+              <option value="m">Christchurch East — DERI score 5.1 (Medium)</option>
+              <option value="l">Bournemouth Central — DERI score 2.4 (Low)</option>
+              <option value="h">Shaftesbury — DERI score 8.7 (High)</option>
+              <option value="h">Crossways — DERI score 7.4 (High)</option>
+              <option value="h">Portland — DERI score 8.1 (High)</option>
+              <option value="h">Weymouth West — DERI score 7.6 (High)</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="d-econ">Economic status</label>
+              <select class="govuk-select" id="d-econ">
+                <option value="">Select...</option>
+                <option value="h">Universal Credit recipient</option>
+                <option value="h">Pension Credit only</option>
+                <option value="m">Low income (&lt;£20k)</option>
+                <option value="l">Employed (£25k+)</option>
+              </select>
+            </div>
+            <div class="govuk-form-group" style="margin-bottom:0">
+              <label class="govuk-label" for="d-conn">Connectivity</label>
+              <select class="govuk-select" id="d-conn">
+                <option value="">Select...</option>
+                <option value="h">No internet access</option>
+                <option value="h">Mobile data only</option>
+                <option value="m">Slow broadband (&lt;10Mbps)</option>
+                <option value="l">Standard broadband</option>
+              </select>
+            </div>
+          </div>
+          <div class="govuk-form-group" style="margin-top:16px">
+            <label class="govuk-label" for="d-dev">Device ownership</label>
+            <select class="govuk-select" id="d-dev">
+              <option value="">Select...</option>
+              <option value="h">No devices at all</option>
+              <option value="h">Shared household device only</option>
+              <option value="l">Owns personal device</option>
+            </select>
+          </div>
+          <button class="govuk-btn govuk-btn--blue" onclick="runDeri()" style="font-size:14px;padding:7px 14px">Run eligibility check</button>
+          <div class="deri-result" id="deri-eligible">
+            <div class="notif-banner notif-banner--success" style="margin-top:14px">
+              <div class="notif-banner__header notif-banner__header--success"><p class="notif-banner__title">Eligible</p></div>
+              <div class="notif-banner__body"><p class="notif-banner__heading">DERI threshold met — resident qualifies for a device</p><p class="notif-banner__text">Select and assign a device from the Digital Doorway programme inventory below.</p></div>
+            </div>
+            <div class="govuk-form-group" style="margin-top:16px">
+              <label class="govuk-label" for="dev-select">Select device to assign</label>
+              <select class="govuk-select" id="dev-select">
+                <optgroup label="Digital Doorway — Laptops">
+                  <option>Laptop (DD-LAP-0031) — Lenovo IdeaPad 3 — Available</option>
+                  <option>Laptop (DD-LAP-0032) — Lenovo IdeaPad 3 — Available</option>
+                  <option>Laptop (DD-LAP-0047) — HP 14 Stream — Available</option>
+                </optgroup>
+                <optgroup label="Digital Doorway — Tablets">
+                  <option>Tablet (DD-TAB-0011) — Samsung Galaxy A8 — Available</option>
+                  <option>Tablet (DD-TAB-0012) — Samsung Galaxy A8 — Available</option>
+                  <option>Tablet (DD-TAB-0019) — Amazon Fire HD 10 — Available</option>
+                </optgroup>
+                <optgroup label="Volunteer Digital Champion — SIM Cards">
+                  <option>SIM Card (VDC-SIM-0118) — 12GB/month data</option>
+                  <option>SIM Card (VDC-SIM-0119) — 12GB/month data</option>
+                  <option>SIM Card (VDC-SIM-0120) — 30GB/month data</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="dev-resident-name">Resident name</label>
+              <input class="govuk-input" id="dev-resident-name" type="text" style="max-width:300px" placeholder="Full name">
+            </div>
+            <button class="govuk-btn" onclick="assignDev()" style="font-size:14px;padding:7px 14px">Assign device and log to Dataverse</button>
+            <div id="dev-confirm" style="display:none;margin-top:12px">
+              <div class="inset inset--green"><p style="font-size:14px;color:var(--gb);margin:0"><strong>Device assigned.</strong> Record created in Dataverse. If a SIM card — confirm activation with the resident.</p></div>
+            </div>
+          </div>
+          <div class="deri-result" id="deri-ineligible">
+            <div class="inset inset--yellow" style="margin-top:14px"><p style="font-size:14px;color:var(--gb);margin:0"><strong>DERI score below threshold.</strong> Resident does not currently meet eligibility criteria. Signpost to the Dorset Digital Hotline: <strong>01305 221048</strong>.</p></div>
+          </div>
+        </div>
+      </div>
+
       <!-- VOLUNTEER MANAGEMENT -->
       <div class="panel" id="panel-volunteers">
         <p class="govuk-caption">Project Support / Team Leader only</p>
@@ -1235,7 +1326,7 @@ function doLogin(){
   const btn=document.getElementById('ms-login-btn');
   currentRole=document.getElementById('login-role').value;
   btn.textContent='Authenticating with Microsoft Entra ID...';btn.disabled=true;
-  const labels={volunteer:'Volunteer / Community Champion',edc:'Embedded Digital Champion',manager:'Project Support / Team Leader'};
+  const labels={volunteer:'Volunteer Digital Champion',manager:'Project Support Officer'};
   setTimeout(()=>{
     document.getElementById('scr-login').classList.remove('active');
     document.getElementById('scr-app').classList.add('active');
@@ -1253,6 +1344,7 @@ function doLogin(){
     // Bookings: visible to all, but manager section inside is manager-only
     document.getElementById('bkt-manage').style.display=isManager?'':'none';
     document.getElementById('bk-data-notice').style.display=isManager?'block':'none';
+    document.getElementById('device-alloc-section').style.display=isManager?'block':'none';
     if(isManager){
       renderVolunteers();renderResidents();renderReferrals();renderRefSummary();
       switchModule('cmd',document.getElementById('tab-cmd'));
@@ -1569,71 +1661,74 @@ function renderFieldApp(){
         <div id="edc-report-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Outcome report submitted. Included in next UKSPF grant return.</div>
       </div>`;
   } else {
-    // Volunteer interface
+    // Volunteer interface — schedule set by Project Support via Microsoft Bookings
     panel.innerHTML=`
-      <p class="govuk-caption">Volunteer Digital Champion Interface</p>
-      <h1 class="govuk-h1">Your Champion Dashboard</h1>
-      <p class="govuk-body-s" style="margin-bottom:20px">Claim session slots, log SIM card handouts, and record your hours. All data syncs to the Council SharePoint List via Microsoft Graph API.</p>
+      <p class="govuk-caption">Volunteer Digital Champion</p>
+      <h1 class="govuk-h1">My Sessions</h1>
+      <p class="govuk-body-s" style="margin-bottom:20px">Your session schedule is set by the Project Support Officer via Microsoft Bookings. Record attendance and log session outcomes below after each session.</p>
 
       <!-- Stats -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
         <div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbl);padding:14px">
           <div style="font-size:26px;font-weight:700;color:var(--gbl)" id="vol-my-hrs">—</div>
-          <div style="font-size:12px;color:#505a5f">my hours this month</div>
+          <div style="font-size:12px;color:#505a5f">hours this month</div>
         </div>
         <div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gr);padding:14px">
           <div style="font-size:26px;font-weight:700;color:var(--gr)" id="vol-my-sess">—</div>
           <div style="font-size:12px;color:#505a5f">sessions delivered</div>
         </div>
         <div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid #c36a00;padding:14px">
-          <div style="font-size:26px;font-weight:700;color:#c36a00" id="vol-my-sims">—</div>
-          <div style="font-size:12px;color:#505a5f">SIM cards given out</div>
+          <div style="font-size:26px;font-weight:700;color:#c36a00" id="vol-my-res">—</div>
+          <div style="font-size:12px;color:#505a5f">residents supported</div>
         </div>
       </div>
 
-      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Session Slots — Claim or View</h2>
-      <p class="govuk-body-s" style="margin-bottom:12px">Live schedule across all 3 Dorset booking zones. Green = active session (champion assigned), blue = open slot you can claim.</p>
-      <div class="filter-row" style="margin-bottom:14px">
-        <div><label for="zone-sel">Filter by zone</label>
-          <select class="govuk-select" id="zone-sel" onchange="filterZone()" style="font-size:14px;width:auto">
-            <option value="all">All zones</option>
-            <option value="purbeck">Purbeck &amp; East Dorset</option>
-            <option value="south">South, West &amp; Central Dorset</option>
-            <option value="north">North Dorset</option>
-          </select></div>
-        <div><label for="date-sel">Date</label>
-          <select class="govuk-select" id="date-sel" style="font-size:14px;width:auto">
-            <option>26 June 2026 (today)</option>
-            <option>27 June 2026 (tomorrow)</option>
-            <option>30 June 2026</option>
-          </select></div>
+      <!-- Upcoming sessions (read-only — set by Project Support via MS Bookings) -->
+      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Your Upcoming Sessions</h2>
+      <p class="govuk-body-s" style="margin-bottom:12px">Scheduled by your Project Support Officer. Contact them to make any changes.</p>
+      <div style="margin-bottom:24px">
+        ${[
+          {date:'Today — Tue 26 Jun 2026',time:'10:00am – 12:00pm',loc:'Dorchester Library',topic:'NHS App & online health',booked:6,capacity:10},
+          {date:'Thu 28 Jun 2026',time:'10:00am – 12:00pm',loc:'Weymouth Library',topic:'Universal Credit & benefits online',booked:4,capacity:8},
+          {date:'Tue 3 Jul 2026',time:'10:00am – 12:00pm',loc:'Dorchester Library',topic:'Email setup & video calls',booked:2,capacity:10},
+        ].map(s=>`<div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbl);padding:14px 16px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-weight:700;font-size:14px;margin-bottom:2px">${s.loc}</div>
+              <div style="font-size:13px;color:#505a5f">${s.date} &bull; ${s.time}</div>
+              <div style="font-size:13px;margin-top:3px">Topic: <strong>${s.topic}</strong></div>
+            </div>
+            <div style="text-align:right;font-size:13px;color:#505a5f">${s.booked} / ${s.capacity} residents booked</div>
+          </div>
+        </div>`).join('')}
       </div>
-      <div id="booking-list" aria-live="polite"></div>
 
+      <!-- Attendance log -->
       <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
-      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Log a SIM Card Handout</h2>
-      <p class="govuk-body-s" style="margin-bottom:14px">Record every SIM card you give to a resident. Inventory is deducted automatically from the Volunteer Digital Champion stock.</p>
+      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Log Today's Attendance</h2>
+      <p class="govuk-body-s" style="margin-bottom:14px">After your session, record who attended so Project Support can track impact and report to funders.</p>
       <div class="add-form" style="margin-bottom:20px">
         <div class="add-grid">
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Resident name</label><input class="govuk-input" id="sim-name" type="text" placeholder="Full name"></div>
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Postcode</label><input class="govuk-input" id="sim-postcode" type="text" style="max-width:130px" placeholder="DT1 1AZ"></div>
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">SIM card ID</label>
-            <select class="govuk-select" id="sim-id" style="font-size:14px">
-              <option>VDC-SIM-0118 — 12GB/month</option>
-              <option>VDC-SIM-0119 — 12GB/month</option>
-              <option>VDC-SIM-0120 — 30GB/month</option>
+          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Session</label>
+            <select class="govuk-select" id="att-session" style="font-size:14px">
+              <option>Dorchester Library — 26 Jun 2026</option>
+              <option>Weymouth Library — 28 Jun 2026</option>
+              <option>Dorchester Library — 3 Jul 2026</option>
             </select></div>
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Date given</label><input class="govuk-input" id="sim-date" type="date" style="font-size:14px"></div>
+          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Residents attended</label><input class="govuk-input" id="att-count" type="number" min="0" style="max-width:80px" placeholder="0"></div>
+          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Did not attend (DNA)</label><input class="govuk-input" id="att-dna" type="number" min="0" style="max-width:80px" placeholder="0"></div>
+          <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1"><label class="govuk-label" style="font-size:14px">Session notes (optional)</label><textarea class="govuk-textarea" id="att-notes" rows="2" style="font-size:14px" placeholder="e.g. Two residents set up NHS App. One needs follow-up — referred to next session."></textarea></div>
         </div>
         <div style="margin-top:14px">
-          <button class="govuk-btn" onclick="logSim()" style="font-size:14px;padding:7px 16px">Log SIM handout</button>
+          <button class="govuk-btn" onclick="logAttendance()" style="font-size:14px;padding:7px 16px">Submit attendance</button>
         </div>
-        <div id="sim-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; SIM card logged. Inventory updated. Record saved to Dataverse.</div>
+        <div id="att-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Attendance logged. Project Support has been notified.</div>
       </div>
 
+      <!-- AI session logger -->
       <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
       <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">AI Post-Session Logger</h2>
-      <p class="govuk-body-s" style="margin-bottom:14px">Speak your session notes. The AI NLP pipeline extracts KPIs and saves them to the Council SharePoint List via Microsoft Graph API.</p>
+      <p class="govuk-body-s" style="margin-bottom:14px">Speak your session notes. The AI extracts structured KPIs and saves them to the Council SharePoint List.</p>
       <div class="voice-box" id="voice-box">
         <h3 style="font-size:16px;font-weight:700;color:var(--gb);margin-bottom:6px">Voice recorder <span class="govuk-tag govuk-tag--blue" style="font-size:11px;vertical-align:middle;margin-left:6px">AI NLP</span></h3>
         <span class="govuk-hint">Press record, speak your session notes, then stop to trigger AI parsing.</span>
@@ -1662,86 +1757,15 @@ function renderFieldApp(){
             <div class="notif-banner__body"><p class="notif-banner__heading">Session log saved</p><p class="notif-banner__text">Record <strong>SL-2847</strong> created in <code>session_impact_logs</code> SharePoint List — synced to Dataverse.</p></div>
           </div>
         </div>
-      </div>
-
-      <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
-      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Digital Doorway — DERI Check &amp; Device Allocation</h2>
-      <p class="govuk-body-s" style="margin-bottom:14px">Run a DERI eligibility check before handing out a <strong>SIM card</strong> to a resident.</p>
-      <div class="deri-box" id="deri-box">
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="d-ward">Resident ward</label>
-          <span class="govuk-hint">Select the resident's ward to assess DERI baseline score</span>
-          <select class="govuk-select" id="d-ward">
-            <option value="">Select ward...</option>
-            <option value="h">Allendale — DERI score 8.2 (High)</option>
-            <option value="h">Bere Regis — DERI score 7.9 (High)</option>
-            <option value="m">Christchurch East — DERI score 5.1 (Medium)</option>
-            <option value="l">Bournemouth Central — DERI score 2.4 (Low)</option>
-            <option value="h">Shaftesbury — DERI score 8.7 (High)</option>
-            <option value="h">Crossways — DERI score 7.4 (High)</option>
-            <option value="h">Portland — DERI score 8.1 (High)</option>
-            <option value="h">Weymouth West — DERI score 7.6 (High)</option>
-          </select>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <div class="govuk-form-group" style="margin-bottom:0">
-            <label class="govuk-label" for="d-econ">Economic status</label>
-            <select class="govuk-select" id="d-econ">
-              <option value="">Select...</option>
-              <option value="h">Universal Credit recipient</option>
-              <option value="h">Pension Credit only</option>
-              <option value="m">Low income (&lt;£20k)</option>
-              <option value="l">Employed (£25k+)</option>
-            </select>
-          </div>
-          <div class="govuk-form-group" style="margin-bottom:0">
-            <label class="govuk-label" for="d-conn">Connectivity</label>
-            <select class="govuk-select" id="d-conn">
-              <option value="">Select...</option>
-              <option value="h">No internet access</option>
-              <option value="h">Mobile data only</option>
-              <option value="m">Slow broadband (&lt;10Mbps)</option>
-              <option value="l">Standard broadband</option>
-            </select>
-          </div>
-        </div>
-        <div class="govuk-form-group" style="margin-top:16px">
-          <label class="govuk-label" for="d-dev">Device ownership</label>
-          <select class="govuk-select" id="d-dev">
-            <option value="">Select...</option>
-            <option value="h">No devices at all</option>
-            <option value="h">Shared household device only</option>
-            <option value="l">Owns personal device</option>
-          </select>
-        </div>
-        <button class="govuk-btn govuk-btn--blue" onclick="runDeri()" style="font-size:14px;padding:7px 14px">Run eligibility check</button>
-        <div class="deri-result" id="deri-eligible">
-          <div class="notif-banner notif-banner--success" style="margin-top:14px">
-            <div class="notif-banner__header notif-banner__header--success"><p class="notif-banner__title">Eligible</p></div>
-            <div class="notif-banner__body"><p class="notif-banner__heading">DERI threshold met</p><p class="notif-banner__text">Resident qualifies. Hand over SIM card now and confirm activation. Laptops are allocated by Digital Doorway — refer to Project Support.</p></div>
-          </div>
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="dev-select">Select SIM to assign</label>
-            <select class="govuk-select" id="dev-select">
-              <optgroup label="Volunteer Digital Champion — SIM cards">
-                <option>SIM Card (VDC-SIM-0118) — 12GB/month data — Champion to give</option>
-                <option>SIM Card (VDC-SIM-0119) — 12GB/month data — Champion to give</option>
-                <option>SIM Card (VDC-SIM-0120) — 30GB/month data — Champion to give</option>
-              </optgroup>
-            </select>
-          </div>
-          <button class="govuk-btn" onclick="assignDev()" style="font-size:14px;padding:7px 14px">Assign and log to Dataverse</button>
-          <div id="dev-confirm" style="display:none;margin-top:12px">
-            <div class="inset inset--green"><p style="font-size:14px;color:var(--gb);margin:0"><strong>Assigned.</strong> SIM card record logged in Dataverse. Hand to resident now and confirm activation.</p></div>
-          </div>
-        </div>
-        <div class="deri-result" id="deri-ineligible">
-          <div class="inset inset--yellow" style="margin-top:14px"><p style="font-size:14px;color:var(--gb);margin:0"><strong>DERI score below threshold.</strong> Resident does not currently qualify. Signpost to the Dorset Digital Hotline: <strong>01305 221048</strong>.</p></div>
-        </div>
       </div>`;
-    // Re-attach booking list render after DOM injection
-    setTimeout(()=>{filterZone();volLoadStats();},50);
+    setTimeout(()=>volLoadStats(),50);
   }
+}
+
+function logAttendance(){
+  const c=document.getElementById('att-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',3000);
+  const hrs=document.getElementById('vol-my-hrs');if(hrs)hrs.textContent=String((parseInt(hrs.textContent)||0)+2);
+  const sess=document.getElementById('vol-my-sess');if(sess)sess.textContent=String((parseInt(sess.textContent)||0)+1);
 }
 
 function logSim(){
@@ -1752,13 +1776,12 @@ function logSim(){
 }
 
 function volLoadStats(){
-  // Populate volunteer stats from their record
   const myVol=volunteers.find(v=>v.type==='Volunteer'&&v.active);
   if(!myVol)return;
-  const hrsEl=document.getElementById('vol-my-hrs');const sessEl=document.getElementById('vol-my-sess');const simEl=document.getElementById('vol-my-sims');
+  const hrsEl=document.getElementById('vol-my-hrs');const sessEl=document.getElementById('vol-my-sess');const resEl=document.getElementById('vol-my-res');
   if(hrsEl)hrsEl.textContent=totalHours(myVol);
   if(sessEl)sessEl.textContent=myVol.hoursLog.length;
-  if(simEl)simEl.textContent='3';
+  if(resEl)resEl.textContent='18';
 }
 
 function edcLogReferral(){
