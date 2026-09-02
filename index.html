@@ -1711,7 +1711,10 @@ function renderFieldApp(){
         </div>
       </div>
 
-      <!-- SESSION 1 — Today with incoming bookings -->
+      <!-- Pending resident bookings — volunteer must accept or reject each -->
+      <div id="vol-pending-bookings-wrap"></div>
+
+      <!-- Today's confirmed session -->
       <div style="background:#fff;border:2px solid var(--gbl);padding:18px;margin-bottom:16px">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
           <div>
@@ -1719,9 +1722,9 @@ function renderFieldApp(){
             <strong style="font-size:15px">Dorchester Library</strong>
             <div style="font-size:13px;color:#505a5f;margin-top:4px">Tue 26 Jun 2026 &bull; 10:00am – 12:00pm &bull; Basic digital training</div>
           </div>
-          <div style="text-align:right;font-size:13px"><strong>6</strong> / 10 booked</div>
+          <div style="text-align:right;font-size:13px"><strong id="today-confirmed-count">4</strong> confirmed attending</div>
         </div>
-        <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--gb)">Residents booked in — from website &amp; library</p>
+        <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--gb)">Confirmed residents — mark attendance after session</p>
         <table style="width:100%;border-collapse:collapse;font-size:13px">
           <thead><tr style="background:var(--gg1)">
             <th style="padding:7px 10px;text-align:left;font-weight:700">Name</th>
@@ -1735,8 +1738,6 @@ function renderFieldApp(){
               {name:'Derek Simms',via:'Library',need:'Universal Credit journal',id:'r2'},
               {name:'Patricia Bourne',via:'Phone',need:'Email setup',id:'r3'},
               {name:'Roy Bassett',via:'Website',need:'Online banking basics',id:'r4'},
-              {name:'June Whitfield',via:'Library',need:'Video calls — family',id:'r5'},
-              {name:'Terry Oldfield',via:'Website',need:'NHS App — GP appointments',id:'r6'},
             ].map(r=>`<tr style="border-bottom:1px solid var(--gg1)">
               <td style="padding:7px 10px;font-weight:600">${r.name}</td>
               <td style="padding:7px 10px;color:#505a5f">${r.via}</td>
@@ -1766,7 +1767,7 @@ function renderFieldApp(){
           <div style="font-weight:700;font-size:14px">${s.loc}</div>
           <div style="font-size:13px;color:#505a5f">${s.date} &bull; ${s.time} &bull; ${s.topic}</div>
         </div>
-        <div style="font-size:13px;color:#505a5f"><strong>${s.booked}</strong> / ${s.capacity} booked</div>
+        <div style="font-size:13px;color:#505a5f"><strong>${s.booked}</strong> / ${s.capacity} confirmed</div>
       </div>`).join('')}
 
       <!-- AI session logger -->
@@ -1837,7 +1838,51 @@ function volLoadStats(){
   if(hrsEl)hrsEl.textContent=totalHours(myVol);
   if(sessEl)sessEl.textContent=myVol.hoursLog.length;
   if(resEl)resEl.textContent='18';
+  renderPendingResidentBookings();
   renderVolInvitations();
+}
+
+/* Resident bookings pending volunteer confirmation */
+let pendingResidentBookings=[
+  {id:'PRB001',name:'June Whitfield',phone:'07700 911002',via:'Website',need:'Video calls — family contact',session:'Dorchester Library',date:'Tue 26 Jun 2026',time:'10:00am – 12:00pm',bookedAt:'Today 08:14am',status:'pending',comment:''},
+  {id:'PRB002',name:'Terry Oldfield',phone:'07700 911003',via:'Library (walk-in)',need:'NHS App — GP appointments',session:'Dorchester Library',date:'Tue 26 Jun 2026',time:'10:00am – 12:00pm',bookedAt:'Today 09:02am',status:'pending',comment:''},
+];
+let nextPRBId=3;
+
+function renderPendingResidentBookings(){
+  const wrap=document.getElementById('vol-pending-bookings-wrap');if(!wrap)return;
+  const pending=pendingResidentBookings.filter(b=>b.status==='pending');
+  if(!pending.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=`<div style="background:var(--tyl-bg);border-left:4px solid var(--gor);padding:16px 18px;margin-bottom:20px">
+    <p style="font-weight:700;font-size:15px;margin-bottom:2px;color:var(--gb)">&#128276; ${pending.length} new resident booking${pending.length>1?'s':''} — your response needed</p>
+    <p style="font-size:13px;color:#505a5f;margin-bottom:14px">Each resident below has booked a place at your session. Accept to confirm their place or reject with a reason (they will be notified).</p>
+    ${pending.map(b=>`<div style="background:#fff;border:1px solid var(--gbd);padding:14px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+        <div>
+          <div style="font-weight:700;font-size:14px">${b.name} <span style="font-size:12px;font-weight:400;color:#505a5f">${b.phone}</span></div>
+          <div style="font-size:13px;color:#505a5f">Booked via: <strong>${b.via}</strong> &bull; ${b.bookedAt}</div>
+          <div style="font-size:13px;margin-top:2px">Session: <strong>${b.session}</strong> &bull; ${b.date} &bull; ${b.time}</div>
+          <div style="font-size:13px;margin-top:2px">Digital need: <strong>${b.need}</strong></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <button class="govuk-btn" onclick="respondResidentBooking('${b.id}','accepted','')" style="font-size:13px;padding:6px 14px;background:var(--gr)">&#10003; Accept</button>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <input type="text" id="rej-${b.id}" class="govuk-input" style="font-size:13px;max-width:260px" placeholder="Reason for rejecting...">
+          <button class="govuk-btn govuk-btn--secondary" onclick="respondResidentBooking('${b.id}','rejected',document.getElementById('rej-${b.id}').value)" style="font-size:13px;padding:6px 12px">&#10007; Reject</button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function respondResidentBooking(id,status,comment){
+  if(status==='rejected'&&!comment.trim()){alert('Please enter a reason before rejecting.');return;}
+  const b=pendingResidentBookings.find(x=>x.id===id);if(!b)return;
+  b.status=status;b.comment=comment.trim();
+  const countEl=document.getElementById('today-confirmed-count');
+  if(status==='accepted'&&countEl)countEl.textContent=String((parseInt(countEl.textContent)||0)+1);
+  renderPendingResidentBookings();
 }
 
 function renderVolInvitations(){
