@@ -1376,15 +1376,23 @@ function doLogin(){
     document.getElementById('hdr-role-label').textContent=labels[currentRole]||'Champion';
     /* Project Support / Team Leader: all three tabs. Volunteers & EDCs: Field App only */
     const isManager=currentRole==='manager';
+    // Field App: volunteers & EDCs only
+    document.getElementById('tab-field').style.display=isManager?'none':'';
+    // Manager-only tabs
     document.getElementById('tab-cmd').style.display=isManager?'':'none';
     document.getElementById('tab-locs').style.display=isManager?'':'none';
-    document.getElementById('bkt-manage').style.display=isManager?'':'none';
-    document.getElementById('bk-data-notice').style.display=isManager?'block':'none';
     document.getElementById('tab-volunteers').style.display=isManager?'':'none';
     document.getElementById('tab-residents').style.display=isManager?'':'none';
     document.getElementById('tab-referrals').style.display=isManager?'':'none';
-    if(isManager){renderVolunteers();renderResidents();renderReferrals();renderRefSummary();}
-    switchModule('field',document.getElementById('tab-field'));
+    // Bookings: visible to all, but manager section inside is manager-only
+    document.getElementById('bkt-manage').style.display=isManager?'':'none';
+    document.getElementById('bk-data-notice').style.display=isManager?'block':'none';
+    if(isManager){
+      renderVolunteers();renderResidents();renderReferrals();renderRefSummary();
+      switchModule('cmd',document.getElementById('tab-cmd'));
+    } else {
+      switchModule('field',document.getElementById('tab-field'));
+    }
   },1800);
 }
 function logout(){
