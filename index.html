@@ -1272,6 +1272,7 @@ function doLogin(){
     const isManager=currentRole==='manager';
     // Field App: volunteers & EDCs only
     document.getElementById('tab-field').style.display=isManager?'none':'';
+    document.getElementById('tab-book').style.display=isManager?'':'none';
     // Manager-only tabs
     document.getElementById('tab-cmd').style.display=isManager?'':'none';
     document.getElementById('tab-locs').style.display=isManager?'':'none';
