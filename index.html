@@ -186,6 +186,43 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
   .report-card__header{flex-direction:column}
   .add-grid{grid-template-columns:1fr}
 }
+/* ── Booking System ── */
+.bk-subnav{display:flex;gap:0;border-bottom:2px solid var(--gbd);margin-bottom:24px;flex-wrap:wrap}
+.bk-subtab{background:none;border:none;border-bottom:4px solid transparent;margin-bottom:-2px;padding:10px 18px;font-size:14px;font-weight:600;color:var(--gg3);cursor:pointer;font-family:arial,sans-serif}
+.bk-subtab:hover{color:var(--gb);background:var(--gg1)}
+.bk-subtab.active{color:var(--gb);border-bottom-color:var(--gbl)}
+.bk-pane{display:none}.bk-pane.show{display:block}
+.session-slot{background:#fff;border:1px solid var(--gbd);padding:16px;margin-bottom:12px;border-left:4px solid var(--gbl)}
+.session-slot--full{border-left-color:var(--gg2)}
+.session-slot__title{font-weight:700;font-size:16px;margin-bottom:6px}
+.session-slot__meta{font-size:13px;color:var(--gg3);display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;align-items:center}
+.session-slot__footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.attend-card{background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gg2);padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.attend-card.attended{border-left-color:var(--gg)}
+.attend-card.dna{border-left-color:var(--gr)}
+.attend-card.walkin{border-left-color:var(--gor)}
+.attend-name{font-weight:700;font-size:15px;flex:1;min-width:140px}
+.attend-needs{font-size:13px;color:var(--gg3);flex:2;min-width:180px}
+.attend-btns{display:flex;gap:6px;flex-wrap:wrap}
+.attend-btn{border:2px solid;padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;font-family:arial,sans-serif}
+.attend-btn.att{border-color:var(--gg);color:var(--gg)}.attend-btn.att.sel{background:var(--gg);color:#fff}
+.attend-btn.dna-b{border-color:var(--gr);color:var(--gr)}.attend-btn.dna-b.sel{background:var(--gr);color:#fff}
+.attend-btn.wlk{border-color:var(--gor);color:var(--gor)}.attend-btn.wlk.sel{background:var(--gor);color:#fff}
+.mgr-session-row{background:#fff;border:1px solid var(--gbd);padding:14px;margin-bottom:10px}
+.mgr-session-row__header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.mgr-session-row__title{font-weight:700;font-size:15px;flex:1;min-width:200px}
+.mgr-booking-item{font-size:13px;padding:6px 0;border-bottom:1px solid var(--gg1);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mgr-booking-item:last-child{border-bottom:none}
+.bk-confirm-box{background:#cce2d8;border-left:4px solid var(--gg);padding:14px 18px;margin-bottom:16px;display:none}
+.bk-dna-alert{background:var(--trd-bg);border-left:4px solid var(--gr);padding:10px 14px;margin-bottom:14px;display:none}
+.cal-preview{background:#f8f9fa;border:1px solid #dee2e6;border-radius:4px;overflow:hidden;margin:0 auto 20px auto;max-width:460px}
+.cal-preview__header{background:#006BFF;color:#fff;padding:16px 20px}
+.cal-preview__body{padding:20px}
+.cal-time-slot{background:#fff;border:1px solid #dee2e6;padding:10px 16px;margin-bottom:8px;cursor:pointer;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.cal-time-slot:hover{background:#e8f0fe;border-color:#006BFF}
+.cal-code{background:#2d2d2d;color:#f8f8f2;padding:16px;font-family:monospace;font-size:12px;overflow-x:auto;line-height:1.7;white-space:pre}
+.cal-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:600px){.cal-compare{grid-template-columns:1fr}.attend-card{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -297,6 +334,7 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
       <button class="module-tab active" onclick="switchModule('field',this)" id="tab-field" aria-selected="true" role="tab">Field App</button>
       <button class="module-tab" onclick="switchModule('cmd',this)" id="tab-cmd" aria-selected="false" role="tab">Command Centre</button>
       <button class="module-tab" onclick="switchModule('locs',this)" id="tab-locs" aria-selected="false" role="tab" style="display:none">Location Manager</button>
+      <button class="module-tab" onclick="switchModule('book',this)" id="tab-book" aria-selected="false" role="tab">Bookings</button>
     </div>
   </div>
 
@@ -346,7 +384,7 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
           <div class="parsed-grid" id="parsed-grid" aria-live="polite">
             <div class="parsed-row"><div class="parsed-k">Duration</div><div class="parsed-v" id="pv-dur">—</div></div>
             <div class="parsed-row"><div class="parsed-k">Location</div><div class="parsed-v" id="pv-loc">—</div></div>
-            <div class="parsed-row"><div class="parsed-k">EDS framework category</div><div class="parsed-v" id="pv-eds">—</div></div>
+            <div class="parsed-row"><div class="parsed-k">DD skills category</div><div class="parsed-v" id="pv-eds">—</div></div>
             <div class="parsed-row"><div class="parsed-k">Outcome</div><div class="parsed-v" id="pv-out">—</div></div>
             <div class="parsed-row"><div class="parsed-k">Referral source</div><div class="parsed-v" id="pv-ref">—</div></div>
             <div class="parsed-row"><div class="parsed-k">DERI risk flag</div><div class="parsed-v" id="pv-deri">—</div></div>
@@ -364,7 +402,7 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
 
         <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
         <h2 class="govuk-h2" id="deri-section">Digital Doorway — Device Verification</h2>
-        <p class="govuk-body-s">Run a Digital Exclusion Risk Index (DERI) eligibility check before allocating a device from the Digital Doorway programme.</p>
+        <p class="govuk-body-s">Run a Digital Exclusion Risk Index (DERI) eligibility check before allocating a <strong>laptop</strong> from the Digital Doorway (DD) programme, or a <strong>SIM card</strong> via the Volunteer Digital Champion network.</p>
         <div class="deri-box" id="deri-box">
           <div class="govuk-form-group">
             <label class="govuk-label" for="d-ward">Resident ward</label>
@@ -416,19 +454,26 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
           <div class="deri-result" id="deri-eligible">
             <div class="notif-banner notif-banner--success" style="margin-top:14px">
               <div class="notif-banner__header notif-banner__header--success"><p class="notif-banner__title">Eligible</p></div>
-              <div class="notif-banner__body"><p class="notif-banner__heading">DERI threshold met — eligible for Digital Doorway device</p><p class="notif-banner__text">Resident qualifies under the Digital Exclusion Risk Index combined score threshold. Proceed to assign from the available device registry.</p></div>
+              <div class="notif-banner__body"><p class="notif-banner__heading">DERI threshold met — eligible for Digital Doorway laptop</p><p class="notif-banner__text">Resident qualifies under the Digital Exclusion Risk Index combined score threshold. Proceed to assign a laptop from the Digital Doorway programme, or a SIM card via the Volunteer Digital Champion network.</p></div>
             </div>
             <div class="govuk-form-group">
-              <label class="govuk-label" for="dev-select">Select available device</label>
+              <label class="govuk-label" for="dev-select">Select item to assign</label>
               <select class="govuk-select" id="dev-select">
-                <option>Tablet (DD-TAB-0042) — Samsung Galaxy Tab A8 — Available</option>
-                <option>SIM Card (DD-SIM-0118) — 12GB/month — Available</option>
-                <option>MiFi Hub (DD-MFI-0009) — 4G Portable Router — Available</option>
+                <optgroup label="Digital Doorway (DD) — Programme devices">
+                  <option>Laptop (DD-LAP-0031) — Lenovo IdeaPad 3 — Available</option>
+                  <option>Laptop (DD-LAP-0032) — Lenovo IdeaPad 3 — Available</option>
+                  <option>Laptop (DD-LAP-0047) — HP 14 Stream — Available</option>
+                </optgroup>
+                <optgroup label="Volunteer Digital Champion — SIM cards">
+                  <option>SIM Card (VDC-SIM-0118) — 12GB/month data — Champion to give</option>
+                  <option>SIM Card (VDC-SIM-0119) — 12GB/month data — Champion to give</option>
+                  <option>SIM Card (VDC-SIM-0120) — 30GB/month data — Champion to give</option>
+                </optgroup>
               </select>
             </div>
             <button class="govuk-btn" onclick="assignDev()" style="font-size:14px;padding:7px 14px">Assign and log to Dataverse</button>
             <div id="dev-confirm" style="display:none;margin-top:12px">
-              <div class="inset inset--green"><p style="font-size:14px;color:var(--gb);margin:0"><strong>Device assigned.</strong> <code>digital_doorway_inventory</code> record created in Dataverse. Status set to <strong>Loaned</strong>.</p></div>
+              <div class="inset inset--green"><p style="font-size:14px;color:var(--gb);margin:0"><strong>Assigned.</strong> <code>digital_doorway_inventory</code> record created in Dataverse. Status set to <strong>Loaned</strong>. If a SIM card — hand to resident now and confirm activation.</p></div>
             </div>
           </div>
           <div class="deri-result" id="deri-ineligible">
@@ -488,12 +533,12 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
           </div>
         </div>
         <hr style="border:none;border-top:1px solid var(--gbd);margin:28px 0">
-        <h2 class="govuk-h2">Essential Digital Skills — framework breakdown</h2>
+        <h2 class="govuk-h2">Digital Doorway (DD) — Skills &amp; Outcomes Breakdown</h2>
         <div class="chart-legend-row">
           <span class="leg-item"><span class="leg-sq" style="background:#1d70b8"></span> Sessions</span>
           <span class="leg-item"><span class="leg-sq" style="background:#00703c"></span> Residents reached</span>
         </div>
-        <div class="chart-wrap"><div style="position:relative;height:260px"><canvas id="eds-chart" role="img" aria-label="EDS bar chart">Device Basics 142/198, Online Safety 87/124, Communication 203/287, Transactions 65/91, Digital Health 178/241, Managing Info 44/62.</canvas></div></div>
+        <div class="chart-wrap"><div style="position:relative;height:260px"><canvas id="eds-chart" role="img" aria-label="Digital Doorway skills bar chart">Laptop Setup 142/198, Online Safety 87/124, Communication 203/287, NHS App &amp; Health 65/91, Benefits &amp; DWP 178/241, Email &amp; Browsing 44/62.</canvas></div></div>
         <h2 class="govuk-h2">Champion network activity — by booking zone</h2>
         <div class="chart-legend-row">
           <span class="leg-item"><span class="leg-sq" style="background:#1d70b8"></span> Purbeck &amp; East</span>
@@ -536,7 +581,7 @@ Digital Dorset Programme | For Cabinet Review
 ──────────────────────────────────────────────────
 Total sessions (Q2):           579      Residents supported:  1,003
 Hotline call deflection:       67%      Cost per intervention: £8.42
-Champion hours (Q2):           1,847    Top EDS category:     Communication
+Champion hours (Q2):           1,847    Top DD category:      Communication
 Digital Doorway devices:       47       Active locations:     23
 
 SELF-SERVICE UPLIFT:
@@ -663,6 +708,234 @@ Auditor signature required by: 31 Aug 2026</div>
         </div>
       </div>
 
+      <!-- BOOKINGS -->
+      <div class="panel" id="panel-book">
+        <p class="govuk-caption">Session Booking &amp; Attendance</p>
+        <h1 class="govuk-h1">Booking System</h1>
+        <p class="govuk-body-s" style="margin-bottom:16px">Manage resident appointments, track attendance, and view champion schedules. Project Support manages all session slots via the Session Manager tab.</p>
+
+        <!-- Data notice — Project Support only -->
+        <div id="bk-data-notice" style="display:none;background:var(--tyl-bg);border-left:4px solid var(--gor);padding:14px 18px;margin-bottom:20px">
+          <p style="font-weight:700;font-size:14px;margin-bottom:6px">&#9888; Important — data is stored in this browser only</p>
+          <p style="font-size:14px;margin-bottom:6px">Bookings made in this demo are saved in the browser's memory. They <strong>will be lost when the page is refreshed or closed</strong>, and cannot be seen by anyone on a different device.</p>
+          <p style="font-size:14px;margin:0">To make bookings permanent and visible to Project Support in real time, connect this platform to <strong>Microsoft Bookings</strong> or a <strong>SharePoint List</strong> via the Microsoft Graph API — your IT team can set this up. Until then, use this module to demo the workflow and train champions.</p>
+        </div>
+
+        <div class="bk-subnav" role="tablist">
+          <button class="bk-subtab active" onclick="bkSwitch('public',this)" role="tab" id="bkt-public">Book a Session</button>
+          <button class="bk-subtab" onclick="bkSwitch('attend',this)" role="tab" id="bkt-attend">Attendance Tracker</button>
+          <button class="bk-subtab" onclick="bkSwitch('manage',this)" role="tab" id="bkt-manage">Session Manager</button>
+          <button class="bk-subtab" onclick="bkSwitch('calendly',this)" role="tab" id="bkt-calendly">Calendly Option</button>
+        </div>
+
+        <!-- Public booking form -->
+        <div class="bk-pane show" id="bk-public">
+          <h2 class="govuk-h2" style="font-size:20px">Book a free digital skills session</h2>
+          <p class="govuk-body-s" style="margin-bottom:18px">Choose a location and time that suits you. A confirmation will be sent to your mobile number.</p>
+
+          <div id="bk-pub-confirm" class="bk-confirm-box">
+            <p style="font-weight:700;margin-bottom:4px">&#10003; Booking confirmed!</p>
+            <p id="bk-pub-confirm-text" style="font-size:14px;margin:0"></p>
+          </div>
+
+          <div class="add-form" style="margin-bottom:16px">
+            <h3 class="govuk-h2" style="font-size:17px;margin-bottom:12px">Step 1 — Choose a session</h3>
+            <div class="filter-row" style="margin-bottom:14px">
+              <div>
+                <label for="pub-zone-filter">Filter by zone</label>
+                <select class="govuk-select" id="pub-zone-filter" onchange="renderPubSessions()" style="font-size:14px;width:auto">
+                  <option value="all">All zones</option>
+                  <option value="purbeck">Purbeck &amp; East Dorset</option>
+                  <option value="south">South, West &amp; Central Dorset</option>
+                  <option value="north">North Dorset</option>
+                </select>
+              </div>
+            </div>
+            <div id="pub-sessions-list"></div>
+          </div>
+
+          <div class="add-form" id="bk-detail-form" style="display:none">
+            <h3 class="govuk-h2" style="font-size:17px;margin-bottom:4px">Step 2 — Your details</h3>
+            <p class="govuk-body-s" id="bk-selected-label" style="margin-bottom:14px;color:var(--gg3)"></p>
+            <div class="add-grid">
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="bk-name" style="font-size:14px">Full name</label>
+                <input class="govuk-input" id="bk-name" type="text" placeholder="e.g. Margaret Williams">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="bk-phone" style="font-size:14px">Mobile number</label>
+                <input class="govuk-input" id="bk-phone" type="tel" placeholder="e.g. 07700 900000">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="bk-postcode" style="font-size:14px">Postcode</label>
+                <input class="govuk-input" id="bk-postcode" type="text" placeholder="e.g. DT1 1AZ" style="max-width:140px">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="govuk-label" for="bk-needs" style="font-size:14px">What help do you need today?</label>
+                <select class="govuk-select" id="bk-needs" style="font-size:14px">
+                  <option value="">— Please choose —</option>
+                  <option>NHS App (appointments, prescriptions, records)</option>
+                  <option>Email setup or password help</option>
+                  <option>Online banking or Universal Credit</option>
+                  <option>Video calls (Zoom, WhatsApp, FaceTime)</option>
+                  <option>Safe browsing &amp; staying secure online</option>
+                  <option>Shopping or finding information online</option>
+                  <option>Government services (DWP, DVLA, HMRC)</option>
+                  <option>Smartphone basics (apps, settings)</option>
+                  <option>Something else — I'll explain when I arrive</option>
+                </select>
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="govuk-label" for="bk-ref" style="font-size:14px">How did you hear about us?</label>
+                <select class="govuk-select" id="bk-ref" style="font-size:14px">
+                  <option value="">— Please choose —</option>
+                  <option>GP / Health centre</option>
+                  <option>Dorset Council Digital Hotline (01305 221048)</option>
+                  <option>Job Centre Plus</option>
+                  <option>Friend or family</option>
+                  <option>Social media / website</option>
+                  <option>Library notice board</option>
+                  <option>Age UK / other charity</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+              <button class="govuk-btn" onclick="submitBooking()" style="font-size:14px;padding:7px 16px">Confirm booking</button>
+              <button class="govuk-btn govuk-btn--secondary" onclick="cancelBooking()" style="font-size:14px;padding:7px 16px">Back to sessions</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance tracker -->
+        <div class="bk-pane" id="bk-attend">
+          <h2 class="govuk-h2" style="font-size:20px">Attendance Tracker</h2>
+          <p class="govuk-body-s" style="margin-bottom:14px">Mark each resident as Attended, Did Not Attend (DNA), or Walk-in. DNA rates above 20% are flagged automatically and feed into the Command Centre dashboard.</p>
+          <div class="filter-row" style="margin-bottom:14px">
+            <div>
+              <label for="att-session-filter">Session</label>
+              <select class="govuk-select" id="att-session-filter" onchange="renderAttendance()" style="font-size:14px;width:auto;min-width:280px"></select>
+            </div>
+          </div>
+          <div id="att-dna-bar" class="bk-dna-alert">
+            <span style="font-weight:700;color:var(--trd-tx)">&#9888; DNA Alert: </span><span id="att-dna-pct" style="font-size:14px;color:var(--trd-tx)"></span>
+          </div>
+          <div id="attend-list"></div>
+          <p style="font-size:13px;color:var(--gg3);margin-top:10px" id="att-summary"></p>
+        </div>
+
+        <!-- Session Manager (Project Support) -->
+        <div class="bk-pane" id="bk-manage">
+          <h2 class="govuk-h2" style="font-size:20px">Session Manager <span class="govuk-tag govuk-tag--purple" style="font-size:11px;vertical-align:middle">Project Support only</span></h2>
+          <p class="govuk-body-s" style="margin-bottom:18px">Create upcoming sessions for each library. Sessions you publish here appear instantly in the public "Book a Session" tab.</p>
+
+          <div class="add-form" style="margin-bottom:20px">
+            <h3 class="govuk-h2" style="font-size:17px;margin-bottom:14px">Create new session</h3>
+            <div class="add-grid">
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="ns-loc" style="font-size:14px">Location</label>
+                <select class="govuk-select" id="ns-loc" style="font-size:14px"></select>
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="ns-date" style="font-size:14px">Session date</label>
+                <input class="govuk-input" id="ns-date" type="date" style="font-size:14px">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="ns-time" style="font-size:14px">Start time</label>
+                <input class="govuk-input" id="ns-time" type="time" value="10:00" style="font-size:14px">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0">
+                <label class="govuk-label" for="ns-cap" style="font-size:14px">Capacity (max residents)</label>
+                <input class="govuk-input" id="ns-cap" type="number" value="6" min="1" max="30" style="font-size:14px;max-width:100px">
+              </div>
+              <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1">
+                <label class="govuk-label" for="ns-type" style="font-size:14px">Session type</label>
+                <select class="govuk-select" id="ns-type" style="font-size:14px">
+                  <option>Drop-in (any digital skills)</option>
+                  <option>NHS App Focus</option>
+                  <option>Online Banking &amp; Fraud Safety</option>
+                  <option>Benefits &amp; DWP Services</option>
+                  <option>Smartphone Basics</option>
+                  <option>Email &amp; Communication</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:16px">
+              <button class="govuk-btn" onclick="createSession()" style="font-size:14px;padding:7px 16px">Publish session</button>
+            </div>
+            <div id="ns-confirm" class="bk-confirm-box" style="margin-top:12px">
+              &#10003; Session published. Residents can now book it from the "Book a Session" tab.
+            </div>
+          </div>
+
+          <h3 class="govuk-h2" style="font-size:17px;margin-bottom:12px">All sessions <span id="mgr-count-badge" class="loc-count">0 sessions</span></h3>
+          <div id="mgr-sessions-list"></div>
+        </div>
+
+        <!-- Calendly Option -->
+        <div class="bk-pane" id="bk-calendly">
+          <h2 class="govuk-h2" style="font-size:20px">Calendly Integration Option</h2>
+          <p class="govuk-body-s" style="margin-bottom:18px">Alongside the built-in booking system, you can embed a free Calendly widget so residents can book directly from champion calendars. Below is a live-style preview and the code to activate it.</p>
+
+          <div class="cal-compare">
+            <div style="background:#fff;border:1px solid var(--gbd);padding:16px">
+              <p style="font-weight:700;font-size:14px;margin-bottom:8px">&#9989; Built-in Booking System (this app)</p>
+              <ul style="font-size:13px;color:var(--gg3);padding-left:18px;line-height:1.9">
+                <li>Fully self-contained — no third-party account needed</li>
+                <li>Attendance tracker &amp; DNA rate alerts built in</li>
+                <li>Project Support controls all session slots</li>
+                <li>All resident data stays within your control</li>
+                <li>Works offline / on local intranet</li>
+              </ul>
+            </div>
+            <div style="background:#fff;border:1px solid var(--gbd);padding:16px">
+              <p style="font-weight:700;font-size:14px;margin-bottom:8px">&#128197; Calendly Embed Option</p>
+              <ul style="font-size:13px;color:var(--gg3);padding-left:18px;line-height:1.9">
+                <li>Residents book directly into champion's live calendar</li>
+                <li>Automatic email &amp; SMS confirmations sent</li>
+                <li>Free Calendly plan available (paid for SMS)</li>
+                <li>Requires internet connection to load widget</li>
+                <li>No built-in attendance tracking (mark manually)</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 class="govuk-h2" style="font-size:17px;margin-bottom:12px">What a Calendly booking page looks like</h3>
+          <div class="cal-preview">
+            <div class="cal-preview__header">
+              <div style="font-size:12px;font-weight:400;opacity:0.85;margin-bottom:4px">Digital Dorset — Free Digital Skills Help</div>
+              <div style="font-weight:700">30 min session &nbsp;&bull;&nbsp; Dorchester Library</div>
+            </div>
+            <div class="cal-preview__body">
+              <p style="font-size:14px;font-weight:700;margin-bottom:12px;color:#212529">Select a time &middot; Thursday, 2 July 2026</p>
+              <div class="cal-time-slot">10:00am <span style="color:#006BFF;font-size:13px">Confirm &rarr;</span></div>
+              <div class="cal-time-slot">10:30am <span style="color:#006BFF;font-size:13px">Confirm &rarr;</span></div>
+              <div class="cal-time-slot">11:00am <span style="color:#006BFF;font-size:13px">Confirm &rarr;</span></div>
+              <div class="cal-time-slot" style="opacity:0.4;cursor:default">11:30am &nbsp;<span style="font-size:13px">Booked</span></div>
+              <div class="cal-time-slot">12:00pm <span style="color:#006BFF;font-size:13px">Confirm &rarr;</span></div>
+              <p style="font-size:12px;color:#868e96;margin-top:14px;text-align:center">Powered by Calendly &nbsp;&bull;&nbsp; Times shown in BST</p>
+            </div>
+          </div>
+
+          <h3 class="govuk-h2" style="font-size:17px;margin-bottom:10px">How to activate the Calendly embed in this app</h3>
+          <p class="govuk-body-s"><strong>Step 1:</strong> Create a free account at <strong>calendly.com</strong> — use your team email address</p>
+          <p class="govuk-body-s"><strong>Step 2:</strong> Create an event type: e.g. "30-min Digital Skills Drop-in" — set your available hours and location</p>
+          <p class="govuk-body-s"><strong>Step 3:</strong> Go to <em>Share &rarr; Embed &rarr; Inline Widget</em> and copy your unique event URL</p>
+          <p class="govuk-body-s" style="margin-bottom:10px"><strong>Step 4:</strong> Replace <code style="background:var(--tyl-bg);padding:2px 6px;font-size:12px">YOUR-CALENDLY-LINK</code> in the code below and paste it into this HTML file where you want the widget to appear:</p>
+          <div class="cal-code">&lt;!-- Calendly inline widget --&gt;
+&lt;div class="calendly-inline-widget"
+  data-url="https://calendly.com/YOUR-CALENDLY-LINK"
+  style="min-width:320px;height:630px;"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"
+  src="https://assets.calendly.com/assets/external/widget.js"
+  async&gt;&lt;/script&gt;</div>
+          <p class="govuk-body-s" style="margin-top:12px"><strong>Multiple champions:</strong> each champion creates their own Calendly event type and you link their library's "Book" button to their personal URL.</p>
+          <div style="background:var(--tyl-bg);border-left:4px solid var(--gor);padding:14px 18px;margin-top:20px">
+            <p style="font-weight:700;font-size:14px;margin-bottom:4px">&#128161; Recommendation</p>
+            <p style="font-size:14px;margin:0">Use the <strong>built-in booking system</strong> as your primary tool — it keeps all resident data within your control and gives you the attendance tracker. Use a <strong>Calendly link as a supplementary option</strong> for residents who prefer self-booking from home (e.g. link it from text confirmations or your council webpage).</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -780,7 +1053,7 @@ function processVoice(){
   const btn=document.getElementById('mic-btn');micState='idle';btn.textContent='Start new recording';btn.disabled=false;btn.className='govuk-btn govuk-btn--blue';
   document.getElementById('pv-dur').textContent='45 minutes';
   document.getElementById('pv-loc').textContent='Christchurch Library';
-  document.getElementById('pv-eds').innerHTML='<span class="govuk-tag govuk-tag--blue" style="font-size:11px">Communication</span> <span class="govuk-tag govuk-tag--turquoise" style="font-size:11px">Digital Health / NHS App</span>';
+  document.getElementById('pv-eds').innerHTML='<span class="govuk-tag govuk-tag--blue" style="font-size:11px">Communication</span> <span class="govuk-tag govuk-tag--turquoise" style="font-size:11px">NHS App &amp; Health</span>';
   document.getElementById('pv-out').textContent='Successful — NHS App prescription booking & password reset';
   document.getElementById('pv-ref').textContent='Digital Hotline (01305 221048)';
   document.getElementById('pv-deri').innerHTML='<span class="govuk-tag govuk-tag--yellow" style="font-size:11px">DERI flagged</span> Pension Credit, no broadband';
@@ -807,10 +1080,11 @@ function switchModule(mod,el){
   document.querySelectorAll('.module-tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false');});
   document.getElementById('panel-'+mod).classList.add('active');
   el.classList.add('active');el.setAttribute('aria-selected','true');
-  const labels={field:'Field App',cmd:'Command Centre',locs:'Location Manager'};
+  const labels={field:'Field App',cmd:'Command Centre',locs:'Location Manager',book:'Booking System'};
   document.getElementById('bc-current').textContent=labels[mod]||mod;
   if(mod==='cmd'&&!edsChart)setTimeout(buildCharts,60);
   if(mod==='locs')renderLocTable();
+  if(mod==='book'){renderPubSessions();}
 }
 
 /* ── KPI & charts ── */
@@ -835,7 +1109,7 @@ function updateKPIs(){
 }
 let edsChart,zoneChart;
 function buildCharts(){
-  edsChart=new Chart(document.getElementById('eds-chart').getContext('2d'),{type:'bar',data:{labels:['Device basics','Online safety','Communication','Transactions','Digital health\n/ NHS App','Managing\ninformation'],datasets:[{label:'Sessions',data:[142,87,203,65,178,44],backgroundColor:'#1d70b8'},{label:'Residents',data:[198,124,287,91,241,62],backgroundColor:'#00703c'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11},autoSkip:false,maxRotation:25},grid:{display:false}},y:{ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.07)'}}}}});
+  edsChart=new Chart(document.getElementById('eds-chart').getContext('2d'),{type:'bar',data:{labels:['Laptop setup\n& basics','Online safety','Communication','NHS App\n& health','Benefits\n& DWP','Email &\nbrowsing'],datasets:[{label:'Sessions',data:[142,87,203,65,178,44],backgroundColor:'#1d70b8'},{label:'Residents',data:[198,124,287,91,241,62],backgroundColor:'#00703c'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11},autoSkip:false,maxRotation:25},grid:{display:false}},y:{ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.07)'}}}}});
   zoneChart=new Chart(document.getElementById('zone-chart').getContext('2d'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Purbeck',data:[38,42,39,51,48,55],borderColor:'#1d70b8',tension:0.3,pointRadius:3,borderDash:[]},{label:'South',data:[62,58,71,68,74,80],borderColor:'#00703c',tension:0.3,pointRadius:3,borderDash:[5,3]},{label:'North',data:[29,34,31,37,41,44],borderColor:'#f47738',tension:0.3,pointRadius:3,borderDash:[2,2]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{ticks:{font:{size:11}},grid:{color:'rgba(0,0,0,0.07)'}}}}});
 }
 function togglePreview(id){document.getElementById('rpt-'+id).classList.toggle('show');}
@@ -904,6 +1178,8 @@ function doLogin(){
     const isManager=currentRole==='manager';
     document.getElementById('tab-cmd').style.display=isManager?'':'none';
     document.getElementById('tab-locs').style.display=isManager?'':'none';
+    document.getElementById('bkt-manage').style.display=isManager?'':'none';
+    document.getElementById('bk-data-notice').style.display=isManager?'block':'none';
     switchModule('field',document.getElementById('tab-field'));
   },1800);
 }
@@ -920,7 +1196,7 @@ function logout(){
 const tourSteps=[
   {text:'Step 1 of 6 — The Unified Booking Hub shows all 23 real Dorset library and hub locations across 3 zones. Green = active, blue = open to claim.',target:'booking-list'},
   {text:'Step 2 of 6 — Filter sessions by zone using the dropdown. Purbeck & East, South West & Central, and North Dorset are all covered.',target:'zone-sel'},
-  {text:'Step 3 of 6 — The AI Voice Logger extracts structured EDS framework KPIs from your spoken notes. Click "Load sample session" to try it.',target:'voice-box'},
+  {text:'Step 3 of 6 — The AI Voice Logger extracts structured Digital Doorway (DD) skills KPIs from your spoken notes. Click "Load sample session" to try it.',target:'voice-box'},
   {text:'Step 4 of 6 — Command Centre KPIs update dynamically by reporting period and zone. The DNA rate toggle activates automated SMS reminders.',target:'kpi-grid'},
   {text:'Step 5 of 6 — Generate monthly, quarterly and annual compliance reports for council governance and grant auditors.',target:'report-section'},
   {text:'Step 6 of 6 — Project Support users see a Location Manager tab to add or remove libraries from the booking network in real time.',target:'tab-locs'},
@@ -938,6 +1214,196 @@ function showTourStep(){
 function tourNext(){if(tourIdx<tourSteps.length-1){tourIdx++;showTourStep();}else{endTour();}}
 function tourPrev(){if(tourIdx>0){tourIdx--;showTourStep();}}
 function endTour(){document.getElementById('tour-bar').style.display='none';document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));}
+
+/* ── BOOKING SYSTEM ── */
+let nextSessionId=10;
+let sessions=[
+  {id:'SN001',locId:10,date:'2026-06-30',dateDisp:'Mon 30 Jun 2026',time:'10:00',timeDisp:'10:00am',cap:6,type:'Drop-in (any digital skills)',created:'26 Jun 2026'},
+  {id:'SN002',locId:11,date:'2026-06-30',dateDisp:'Mon 30 Jun 2026',time:'10:00',timeDisp:'10:00am',cap:6,type:'NHS App Focus',created:'26 Jun 2026'},
+  {id:'SN003',locId:10,date:'2026-07-02',dateDisp:'Wed 2 Jul 2026',time:'10:00',timeDisp:'10:00am',cap:8,type:'Drop-in (any digital skills)',created:'26 Jun 2026'},
+  {id:'SN004',locId:18,date:'2026-07-03',dateDisp:'Thu 3 Jul 2026',time:'10:00',timeDisp:'10:00am',cap:6,type:'Benefits & DWP Services',created:'26 Jun 2026'},
+  {id:'SN005',locId:1, date:'2026-07-03',dateDisp:'Thu 3 Jul 2026',time:'10:00',timeDisp:'10:00am',cap:5,type:'Drop-in (any digital skills)',created:'26 Jun 2026'},
+];
+let residentBookings=[
+  {id:'RBK001',sessionId:'SN001',name:'Margaret Williams',phone:'07700 900123',postcode:'DT1 1AB',needs:'NHS App (appointments, prescriptions, records)',ref:'GP / Health centre',attendance:null,bookedOn:'25 Jun 2026'},
+  {id:'RBK002',sessionId:'SN001',name:'Derek Thompson',phone:'07700 900456',postcode:'DT1 2CD',needs:'Email setup or password help',ref:'Friend or family',attendance:null,bookedOn:'25 Jun 2026'},
+  {id:'RBK003',sessionId:'SN001',name:'Eileen Marsh',phone:'07700 900789',postcode:'DT1 3EF',needs:'Safe browsing & staying secure online',ref:'Library notice board',attendance:null,bookedOn:'25 Jun 2026'},
+  {id:'RBK004',sessionId:'SN002',name:'Ronald Hughes',phone:'07700 901234',postcode:'DT4 7AB',needs:'NHS App (appointments, prescriptions, records)',ref:'GP / Health centre',attendance:null,bookedOn:'24 Jun 2026'},
+  {id:'RBK005',sessionId:'SN002',name:'Patricia Doyle',phone:'07700 901567',postcode:'DT4 8CD',needs:'Online banking or Universal Credit',ref:'Dorset Council Digital Hotline (01305 221048)',attendance:null,bookedOn:'24 Jun 2026'},
+];
+let selectedSessionId=null,nextRBKId=100;
+
+function bkSwitch(pane,el){
+  document.querySelectorAll('.bk-subtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.bk-pane').forEach(p=>p.classList.remove('show'));
+  el.classList.add('active');
+  document.getElementById('bk-'+pane).classList.add('show');
+  if(pane==='public')renderPubSessions();
+  if(pane==='attend'){populateAttendFilter();renderAttendance();}
+  if(pane==='manage'){populateNsLoc();renderMgrSessions();}
+}
+
+function renderPubSessions(){
+  const zone=document.getElementById('pub-zone-filter')?document.getElementById('pub-zone-filter').value:'all';
+  const list=document.getElementById('pub-sessions-list');
+  if(!list)return;
+  const today='2026-06-26';
+  let shown=sessions.filter(s=>s.date>=today);
+  if(zone!=='all')shown=shown.filter(s=>{const l=locations.find(x=>x.id===s.locId);return l&&l.zone===zone;});
+  if(!shown.length){list.innerHTML='<p class="govuk-body-s">No upcoming sessions in this zone. Ask Project Support to create new sessions in the Session Manager tab.</p>';return;}
+  list.innerHTML=shown.map(s=>{
+    const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown',zone:'south'};
+    const booked=residentBookings.filter(r=>r.sessionId===s.id).length;
+    const full=booked>=s.cap;
+    const zc=zoneTagClass[loc.zone]||'govuk-tag--grey';
+    return`<div class="session-slot${full?' session-slot--full':''}">
+      <div class="session-slot__title">${loc.name}</div>
+      <div class="session-slot__meta">
+        <span>&#128197; ${s.dateDisp}</span>
+        <span>&#128336; ${s.timeDisp}</span>
+        <span class="govuk-tag ${zc}" style="font-size:11px">${zoneNames[loc.zone]||loc.zone}</span>
+        <span style="font-style:italic">${s.type}</span>
+      </div>
+      <div class="session-slot__footer">
+        <span class="govuk-tag ${full?'govuk-tag--grey':'govuk-tag--green'}" style="font-size:11px">${full?'Fully booked':booked+'/'+s.cap+' places booked'}</span>
+        ${!full?`<button class="govuk-btn govuk-btn--blue" onclick="selectSession('${s.id}')" style="font-size:13px;padding:5px 12px;margin:0">Book this session</button>`:`<span style="font-size:13px;color:var(--gg3)">No places remaining</span>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectSession(id){
+  selectedSessionId=id;
+  const s=sessions.find(x=>x.id===id);
+  const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
+  document.getElementById('bk-selected-label').textContent=loc.name+' · '+s.dateDisp+' · '+s.timeDisp+' · '+s.type;
+  document.getElementById('bk-detail-form').style.display='block';
+  document.getElementById('bk-pub-confirm').style.display='none';
+  document.getElementById('bk-detail-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function submitBooking(){
+  const name=document.getElementById('bk-name').value.trim();
+  const phone=document.getElementById('bk-phone').value.trim();
+  const postcode=document.getElementById('bk-postcode').value.trim();
+  const needs=document.getElementById('bk-needs').value;
+  const ref=document.getElementById('bk-ref').value;
+  if(!name||!phone||!postcode||!needs||!ref){alert('Please complete all fields before confirming your booking.');return;}
+  const s=sessions.find(x=>x.id===selectedSessionId);
+  const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
+  residentBookings.push({id:'RBK'+(nextRBKId++),sessionId:selectedSessionId,name,phone,postcode,needs,ref,attendance:null,bookedOn:'26 Jun 2026'});
+  const ctxt=document.getElementById('bk-pub-confirm-text');
+  ctxt.textContent=name+' — '+loc.name+' on '+s.dateDisp+' at '+s.timeDisp+'. A confirmation text will be sent to '+phone+'.';
+  document.getElementById('bk-pub-confirm').style.display='block';
+  document.getElementById('bk-detail-form').style.display='none';
+  ['bk-name','bk-phone','bk-postcode'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('bk-needs').value='';document.getElementById('bk-ref').value='';
+  renderPubSessions();
+  document.getElementById('bk-pub-confirm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function cancelBooking(){document.getElementById('bk-detail-form').style.display='none';selectedSessionId=null;}
+
+function populateAttendFilter(){
+  const sel=document.getElementById('att-session-filter');if(!sel)return;
+  sel.innerHTML=sessions.map(s=>{
+    const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
+    return`<option value="${s.id}">${loc.name} · ${s.dateDisp} · ${s.timeDisp}</option>`;
+  }).join('');
+}
+
+function renderAttendance(){
+  const sel=document.getElementById('att-session-filter');if(!sel)return;
+  const sid=sel.value;
+  const bkList=residentBookings.filter(r=>r.sessionId===sid);
+  const list=document.getElementById('attend-list');
+  if(!bkList.length){list.innerHTML='<p class="govuk-body-s" style="color:var(--gg3)">No residents booked for this session yet. They will appear here once bookings are made.</p>';document.getElementById('att-summary').textContent='';document.getElementById('att-dna-bar').style.display='none';return;}
+  list.innerHTML=bkList.map(r=>{
+    const cls=r.attendance==='attended'?' attended':r.attendance==='dna'?' dna':r.attendance==='walkin'?' walkin':'';
+    return`<div class="attend-card${cls}" id="ac-${r.id}">
+      <div class="attend-name">${r.name}</div>
+      <div class="attend-needs">${r.needs}<br><span style="font-size:12px;color:var(--gg2)">${r.postcode} &bull; ${r.ref}</span></div>
+      <div class="attend-btns">
+        <button class="attend-btn att${r.attendance==='attended'?' sel':''}" onclick="markAttend('${r.id}','attended')">&#10003; Attended</button>
+        <button class="attend-btn dna-b${r.attendance==='dna'?' sel':''}" onclick="markAttend('${r.id}','dna')">&#10007; DNA</button>
+        <button class="attend-btn wlk${r.attendance==='walkin'?' sel':''}" onclick="markAttend('${r.id}','walkin')">+ Walk-in</button>
+      </div>
+    </div>`;
+  }).join('');
+  const dnaC=bkList.filter(r=>r.attendance==='dna').length;
+  const attC=bkList.filter(r=>r.attendance==='attended').length;
+  const wlkC=bkList.filter(r=>r.attendance==='walkin').length;
+  const dnaRate=bkList.length>0?Math.round((dnaC/bkList.length)*100):0;
+  document.getElementById('att-summary').textContent=attC+' attended · '+dnaC+' DNA · '+wlkC+' walk-in · '+bkList.filter(r=>!r.attendance).length+' unmarked';
+  const bar=document.getElementById('att-dna-bar');
+  if(dnaRate>=20){bar.style.display='block';document.getElementById('att-dna-pct').textContent=dnaRate+'% DNA rate — above the 20% threshold. Command Centre KPI has been updated.';}
+  else{bar.style.display='none';}
+}
+
+function markAttend(id,type){
+  const r=residentBookings.find(x=>x.id===id);
+  if(r){r.attendance=r.attendance===type?null:type;}
+  renderAttendance();
+}
+
+function populateNsLoc(){
+  const sel=document.getElementById('ns-loc');if(!sel)return;
+  sel.innerHTML=locations.map(l=>`<option value="${l.id}">${l.name} (${zoneNames[l.zone]||l.zone})</option>`).join('');
+}
+
+function createSession(){
+  const locId=parseInt(document.getElementById('ns-loc').value);
+  const date=document.getElementById('ns-date').value;
+  const time=document.getElementById('ns-time').value;
+  const cap=parseInt(document.getElementById('ns-cap').value)||6;
+  const type=document.getElementById('ns-type').value;
+  if(!date||!time){alert('Please enter a date and start time.');return;}
+  const d=new Date(date+'T12:00:00');
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dateDisp=days[d.getDay()]+' '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+  const[h,m]=time.split(':');const hr=parseInt(h);
+  const timeDisp=(hr%12||12)+':'+(m||'00')+(hr<12?'am':'pm');
+  sessions.push({id:'SN'+(nextSessionId++),locId,date,dateDisp,time,timeDisp,cap,type,created:'26 Jun 2026'});
+  const conf=document.getElementById('ns-confirm');conf.style.display='block';
+  setTimeout(()=>conf.style.display='none',3500);
+  renderMgrSessions();
+  renderPubSessions();
+}
+
+function renderMgrSessions(){
+  const list=document.getElementById('mgr-sessions-list');if(!list)return;
+  document.getElementById('mgr-count-badge').textContent=sessions.length+' session'+(sessions.length!==1?'s':'');
+  if(!sessions.length){list.innerHTML='<p class="govuk-body-s" style="color:var(--gg3)">No sessions yet. Use the form above to create one.</p>';return;}
+  const sorted=[...sessions].sort((a,b)=>a.date.localeCompare(b.date));
+  list.innerHTML=sorted.map(s=>{
+    const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
+    const bkd=residentBookings.filter(r=>r.sessionId===s.id);
+    const full=bkd.length>=s.cap;
+    return`<div class="mgr-session-row">
+      <div class="mgr-session-row__header">
+        <span class="mgr-session-row__title">${loc.name}</span>
+        <span class="govuk-tag ${zoneTagClass[loc.zone]||''}" style="font-size:11px">${zoneNames[loc.zone]||''}</span>
+        <span style="font-size:13px;color:var(--gg3)">${s.dateDisp} &bull; ${s.timeDisp} &bull; <em>${s.type}</em></span>
+        <span class="govuk-tag ${full?'govuk-tag--grey':'govuk-tag--green'}" style="font-size:11px">${bkd.length}/${s.cap} booked</span>
+        <button onclick="deleteSession('${s.id}')" style="margin-left:auto;background:none;border:1px solid var(--gr);color:var(--gr);padding:3px 10px;font-size:12px;cursor:pointer;font-family:arial,sans-serif">Delete</button>
+      </div>
+      ${bkd.length?bkd.map(r=>`<div class="mgr-booking-item">
+        <span style="font-weight:700;min-width:160px">${r.name}</span>
+        <span style="color:var(--gg3)">${r.phone} &bull; ${r.postcode}</span>
+        <span style="color:var(--gg3);flex:1">${r.needs}</span>
+        <span class="govuk-tag ${r.attendance==='attended'?'govuk-tag--green':r.attendance==='dna'?'govuk-tag--red':r.attendance==='walkin'?'govuk-tag--orange':'govuk-tag--grey'}" style="font-size:10px">${r.attendance||'pending'}</span>
+      </div>`).join(''):`<p style="font-size:13px;color:var(--gg3);margin:0;padding-top:4px">No residents booked yet.</p>`}
+    </div>`;
+  }).join('');
+}
+
+function deleteSession(id){
+  if(!confirm('Delete this session? All resident bookings for this session will also be removed.'))return;
+  sessions=sessions.filter(s=>s.id!==id);
+  residentBookings=residentBookings.filter(r=>r.sessionId!==id);
+  renderMgrSessions();renderPubSessions();
+}
 </script>
 </body>
 </html>
