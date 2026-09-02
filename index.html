@@ -402,7 +402,7 @@ body{font-family:arial,sans-serif;font-size:16px;line-height:1.5;color:var(--gb)
       <div class="panel" id="panel-cmd">
         <p class="govuk-caption">Project Support &amp; Leadership Team</p>
         <h1 class="govuk-h1">Command Centre</h1>
-        <p class="govuk-body-s" style="margin-bottom:20px">County-wide network monitoring. Data sourced from Microsoft Bookings, SharePoint Lists, and Dataverse via Graph API.</p>
+        <p class="govuk-body-s" style="margin-bottom:20px">County-wide network monitoring. Data sourced from the Digital Dorset platform booking system, SharePoint Lists, and Dataverse via Graph API.</p>
         <div class="filter-row">
           <div>
             <label for="rpt-period">Reporting period</label>
@@ -532,7 +532,7 @@ Auditor signature required by: 31 Aug 2026</div>
             <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px">
               <thead><tr><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Component</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Graph API endpoint</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Data model</th><th style="padding:8px;background:var(--gb);color:#fff;text-align:left;font-size:12px">Scope</th></tr></thead>
               <tbody>
-                <tr><td style="padding:8px;border-bottom:1px solid var(--gbd);background:var(--gg1);font-weight:700">Microsoft Bookings</td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>/solutions/bookingBusinesses</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>booking_appointments</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>Bookings.Read.All</code></td></tr>
+                <tr><td style="padding:8px;border-bottom:1px solid var(--gbd);background:var(--gg1);font-weight:700">Digital Dorset Bookings</td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>/sessions</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>session_appointments</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>Sessions.Read.All</code></td></tr>
                 <tr><td style="padding:8px;border-bottom:1px solid var(--gbd);background:var(--gg1);font-weight:700">SharePoint Lists</td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>/sites/{site-id}/lists</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>session_impact_logs</code></td><td style="padding:8px;border-bottom:1px solid var(--gbd);background:#fff"><code>Sites.ReadWrite.All</code></td></tr>
                 <tr><td style="padding:8px;background:var(--gg1);font-weight:700">Dataverse</td><td style="padding:8px;background:#fff"><code>Power Platform API</code></td><td style="padding:8px;background:#fff"><code>digital_doorway_inventory</code></td><td style="padding:8px;background:#fff"><code>Dynamics.ReadWrite.All</code></td></tr>
               </tbody>
@@ -546,7 +546,7 @@ Auditor signature required by: 31 Aug 2026</div>
       <div class="panel" id="panel-locs">
         <p class="govuk-caption">Project Support / Team Leader only</p>
         <h1 class="govuk-h1">Location Manager</h1>
-        <p class="govuk-body-s" style="margin-bottom:4px">Add or remove Dorset library and community hub locations from the booking network. Changes sync to Microsoft Bookings via Graph API. <span id="loc-count-badge" class="loc-count">23 locations</span></p>
+        <p class="govuk-body-s" style="margin-bottom:4px">Add or remove Dorset library and community hub locations from the booking network. Changes sync across all champion devices via the Digital Dorset platform. <span id="loc-count-badge" class="loc-count">23 locations</span></p>
         <p class="govuk-body-s" style="margin-bottom:20px">Source: <a href="https://www.dorsetcouncil.gov.uk/w/volunteer-digital-champions" style="color:var(--gbl)">Dorset Council Digital Champion Sessions</a> &amp; <a href="https://www.dorsetcouncil.gov.uk/libraries-history-culture/libraries/find-your-local-library/dorset-libraries" style="color:var(--gbl)">Find a Dorset Library</a>.</p>
 
         <div id="loc-confirm" style="display:none;margin-bottom:16px"></div>
@@ -634,7 +634,7 @@ Auditor signature required by: 31 Aug 2026</div>
         <div id="bk-data-notice" style="display:none;background:var(--tyl-bg);border-left:4px solid var(--gor);padding:14px 18px;margin-bottom:20px">
           <p style="font-weight:700;font-size:14px;margin-bottom:6px">&#9888; Important — data is stored in this browser only</p>
           <p style="font-size:14px;margin-bottom:6px">Bookings made in this demo are saved in the browser's memory. They <strong>will be lost when the page is refreshed or closed</strong>, and cannot be seen by anyone on a different device.</p>
-          <p style="font-size:14px;margin:0">To make bookings permanent and visible to Project Support in real time, connect this platform to <strong>Microsoft Bookings</strong> or a <strong>SharePoint List</strong> via the Microsoft Graph API — your IT team can set this up. Until then, use this module to demo the workflow and train champions.</p>
+          <p style="font-size:14px;margin:0">Sessions created here are stored in the platform and visible to all champions in real time. To persist data beyond the browser session, connect to a SharePoint List or Dataverse via the Microsoft Graph API — your IT team can configure this. Until then, use this module to run sessions and train champions.</p>
         </div>
 
         <div class="bk-subnav" role="tablist">
@@ -1209,15 +1209,15 @@ function addLocation(){
   if(!time){alert('Please enter a session time.');return;}
   locations.push({id:nextId++,name,zone,day,time,champion:champ||'TBC',type});
   document.getElementById('new-name').value='';document.getElementById('new-time').value='';document.getElementById('new-champ').value='';
-  showLocConfirm('success','Location added','<strong>'+name+'</strong> has been added to the '+zoneNames[zone]+' zone and synced to Microsoft Bookings.');
+  showLocConfirm('success','Location added','<strong>'+name+'</strong> has been added to the '+zoneNames[zone]+' zone and is now live in the booking system.');
   renderLocTable();
 }
 
 function deleteLocation(id,name){
-  if(!confirm('Remove "'+name+'" from the booking network?\n\nThis will delete the location from Microsoft Bookings and all future sessions will be cancelled.'))return;
+  if(!confirm('Remove "'+name+'" from the booking network?\n\nAll future sessions at this location will be cancelled.'))return;
   locations=locations.filter(l=>l.id!==id);
   bookings=bookings.filter(b=>b.locId!==id);
-  showLocConfirm('error','Location removed','<strong>'+name+'</strong> has been removed. All associated upcoming sessions have been cancelled in Microsoft Bookings.');
+  showLocConfirm('error','Location removed','<strong>'+name+'</strong> has been removed. All associated upcoming sessions have been cancelled.');
   renderLocTable();
   renderBookings(document.getElementById('zone-sel').value);
 }
