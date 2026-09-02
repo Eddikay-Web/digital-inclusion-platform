@@ -1542,6 +1542,26 @@ function createSession(){
   renderPubSessions();
 }
 
+/* volunteer notification store */
+let volInvitations=[
+  {id:'INV001',sessionId:null,loc:'Dorchester Library',date:'Tue 26 Jun 2026',time:'10:00am – 12:00pm',topic:'NHS App & online health',volunteer:'Sarah Makepeace',volEmail:'sarah.m@gmail.com',volPhone:'07700 900001',notifyMethod:'both',status:'accepted',comment:''},
+];
+let nextInvId=2;
+
+function notifyVolunteer(sid){
+  const s=sessions.find(x=>x.id===sid);if(!s)return;
+  const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
+  const vName=prompt('Volunteer name to notify:','Sarah Makepeace');if(!vName)return;
+  const vEmail=prompt('Volunteer email:','sarah.m@gmail.com');if(!vEmail)return;
+  const vPhone=prompt('Volunteer phone:','07700 900001');if(!vPhone)return;
+  const method=prompt('Notify by (email / sms / both):','both')||'both';
+  const inv={id:'INV'+String(nextInvId++).padStart(3,'0'),sessionId:sid,loc:loc.name,date:s.dateDisp,time:s.timeDisp,topic:s.type,volunteer:vName,volEmail:vEmail,volPhone:vPhone,notifyMethod:method,status:'pending',comment:''};
+  volInvitations.push(inv);
+  s.invId=inv.id;
+  alert('Notification sent to '+vName+' via '+(method==='both'?'email ('+vEmail+') and SMS ('+vPhone+')':method==='sms'?'SMS ('+vPhone+')':'email ('+vEmail+')')+'. Awaiting response.');
+  renderMgrSessions();
+}
+
 function renderMgrSessions(){
   const list=document.getElementById('mgr-sessions-list');if(!list)return;
   document.getElementById('mgr-count-badge').textContent=sessions.length+' session'+(sessions.length!==1?'s':'');
@@ -1551,14 +1571,19 @@ function renderMgrSessions(){
     const loc=locations.find(x=>x.id===s.locId)||{name:'Unknown'};
     const bkd=residentBookings.filter(r=>r.sessionId===s.id);
     const full=bkd.length>=s.cap;
+    const inv=s.invId?volInvitations.find(i=>i.id===s.invId):null;
+    const invBadge=inv?`<span class="govuk-tag ${inv.status==='accepted'?'govuk-tag--green':inv.status==='declined'?'govuk-tag--red':'govuk-tag--yellow'}" style="font-size:11px;vertical-align:middle">Champion: ${inv.status==='accepted'?'&#10003; Accepted':inv.status==='declined'?'&#10007; Declined — '+inv.comment:'&#9679; Awaiting response'}</span>`:'';
+    const notifyBtn=inv?'':'<button onclick="notifyVolunteer(\''+s.id+'\')" style="background:var(--tbl-bg);color:var(--tbl-tx);border:none;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-left:8px">&#128276; Notify volunteer</button>';
     return`<div class="mgr-session-row">
       <div class="mgr-session-row__header">
         <span class="mgr-session-row__title">${loc.name}</span>
         <span class="govuk-tag ${zoneTagClass[loc.zone]||''}" style="font-size:11px">${zoneNames[loc.zone]||''}</span>
         <span style="font-size:13px;color:var(--gg3)">${s.dateDisp} &bull; ${s.timeDisp} &bull; <em>${s.type}</em></span>
         <span class="govuk-tag ${full?'govuk-tag--grey':'govuk-tag--green'}" style="font-size:11px">${bkd.length}/${s.cap} booked</span>
+        ${invBadge}${notifyBtn}
         <button onclick="deleteSession('${s.id}')" style="margin-left:auto;background:none;border:1px solid var(--gr);color:var(--gr);padding:3px 10px;font-size:12px;cursor:pointer;font-family:arial,sans-serif">Delete</button>
       </div>
+      ${inv&&inv.status==='declined'?`<div style="background:var(--trd-bg);padding:8px 12px;font-size:13px;color:var(--trd-tx);margin-top:6px"><strong>Declined by ${inv.volunteer}:</strong> "${inv.comment}" — please reassign or contact the volunteer.</div>`:''}
       ${bkd.length?bkd.map(r=>`<div class="mgr-booking-item">
         <span style="font-weight:700;min-width:160px">${r.name}</span>
         <span style="color:var(--gg3)">${r.phone} &bull; ${r.postcode}</span>
@@ -1666,6 +1691,9 @@ function renderFieldApp(){
       <p class="govuk-caption">Volunteer Digital Champion</p>
       <h1 class="govuk-h1">My Sessions</h1>
       <p class="govuk-body-s" style="margin-bottom:20px">Your sessions are scheduled by the Project Support Officer. Residents book directly via the council website or at the library — their bookings appear below so you know who to expect.</p>
+
+      <!-- Session invitations -->
+      <div id="vol-invitations-wrap"></div>
 
       <!-- Stats -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px">
@@ -1809,6 +1837,40 @@ function volLoadStats(){
   if(hrsEl)hrsEl.textContent=totalHours(myVol);
   if(sessEl)sessEl.textContent=myVol.hoursLog.length;
   if(resEl)resEl.textContent='18';
+  renderVolInvitations();
+}
+
+function renderVolInvitations(){
+  const wrap=document.getElementById('vol-invitations-wrap');if(!wrap)return;
+  const pending=volInvitations.filter(i=>i.status==='pending');
+  if(!pending.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=pending.map(inv=>`
+    <div style="background:var(--tyl-bg);border-left:4px solid var(--gor);padding:16px 18px;margin-bottom:20px">
+      <p style="font-weight:700;font-size:15px;margin-bottom:4px;color:var(--gb)">&#128276; New session invitation — action required</p>
+      <p style="font-size:13px;margin-bottom:10px;color:var(--gb)">
+        <strong>${inv.loc}</strong> &bull; ${inv.date} &bull; ${inv.time}<br>
+        Topic: <strong>${inv.topic}</strong><br>
+        Notified via: ${inv.notifyMethod==='both'?'Email ('+inv.volEmail+') &amp; SMS ('+inv.volPhone+')':inv.notifyMethod==='sms'?'SMS ('+inv.volPhone+')':'Email ('+inv.volEmail+')'}
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <button class="govuk-btn" onclick="respondInvitation('${inv.id}','accepted','')" style="font-size:13px;padding:6px 16px;background:var(--gr)">&#10003; Accept session</button>
+        <div>
+          <label style="font-size:13px;font-weight:700;display:block;margin-bottom:4px">Decline reason (required to decline):</label>
+          <input type="text" id="dec-comment-${inv.id}" class="govuk-input" style="font-size:13px;max-width:300px;display:inline-block;margin-right:8px" placeholder="e.g. Holiday, prior commitment...">
+          <button class="govuk-btn govuk-btn--secondary" onclick="respondInvitation('${inv.id}','declined',document.getElementById('dec-comment-${inv.id}').value)" style="font-size:13px;padding:6px 14px">&#10007; Decline</button>
+        </div>
+      </div>
+      <div id="inv-confirm-${inv.id}" class="bk-confirm-box" style="margin-top:10px;display:none"></div>
+    </div>`).join('');
+}
+
+function respondInvitation(invId,status,comment){
+  if(status==='declined'&&!comment.trim()){alert('Please enter a reason before declining.');return;}
+  const inv=volInvitations.find(i=>i.id===invId);if(!inv)return;
+  inv.status=status;inv.comment=comment.trim();
+  const c=document.getElementById('inv-confirm-'+invId);
+  if(c){c.style.display='block';c.textContent=status==='accepted'?'&#10003; Session accepted. Project Support has been notified.':'Session declined. Project Support has been notified with your reason.';}
+  setTimeout(()=>renderVolInvitations(),1500);
 }
 
 function edcLogReferral(){
