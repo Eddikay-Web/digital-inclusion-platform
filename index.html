@@ -1067,6 +1067,7 @@ let bookings = [
 
 function renderBookings(filter){
   const list=document.getElementById('booking-list');
+  if(!list)return;
   const items=filter==='all'?bookings:bookings.filter(b=>{const l=locations.find(x=>x.id===b.locId);return l&&l.zone===filter;});
   if(!items.length){list.innerHTML='<p class="govuk-body-s">No sessions found for this zone.</p>';return;}
   list.innerHTML=items.map(b=>{
