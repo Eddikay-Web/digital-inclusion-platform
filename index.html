@@ -1693,6 +1693,25 @@ function renderFieldApp(){
         <div style="font-size:13px;color:#505a5f"><strong>${s.booked}</strong> / ${s.capacity} confirmed</div>
       </div>`).join('')}
 
+      <!-- Attendance Tracker -->
+      <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
+      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Attendance Tracker</h2>
+      <p class="govuk-body-s" style="margin-bottom:14px">Mark each resident as Attended, DNA, or Walk-in for any of your sessions. Attendance is shared with Project Support and feeds into the programme dashboard.</p>
+      <div class="filter-row" style="margin-bottom:14px">
+        <div><label for="vol-att-session-filter" style="font-size:14px;font-weight:700;display:block;margin-bottom:4px">Session</label>
+          <select class="govuk-select" id="vol-att-session-filter" onchange="renderVolAttendance()" style="font-size:14px;width:auto;min-width:280px">
+            <option value="today">Dorchester Library &mdash; Tue 26 Jun 2026 &bull; 10:00am</option>
+            <option value="next1">Weymouth Library &mdash; Thu 28 Jun 2026 &bull; 10:00am</option>
+            <option value="next2">Dorchester Library &mdash; Tue 3 Jul 2026 &bull; 10:00am</option>
+          </select>
+        </div>
+      </div>
+      <div id="vol-att-dna-bar" style="display:none;background:var(--trd-bg);border-left:4px solid var(--trd-tx);padding:10px 14px;margin-bottom:12px;font-size:13px">
+        <strong style="color:var(--trd-tx)">&#9888; DNA Alert:</strong> <span id="vol-att-dna-pct" style="color:var(--trd-tx)"></span>
+      </div>
+      <div id="vol-attend-list"></div>
+      <p style="font-size:13px;color:var(--gg3);margin-top:8px" id="vol-att-summary"></p>
+
       <!-- AI session logger -->
       <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
       <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">AI Post-Session Logger</h2>
@@ -1730,6 +1749,60 @@ function renderFieldApp(){
   }
 }
 
+/* Volunteer-side attendance tracker */
+const volSessionResidents={
+  today:[
+    {id:'vr1',name:'Margaret Holloway',via:'Website',need:'NHS App — prescriptions',attendance:null},
+    {id:'vr2',name:'Derek Simms',via:'Library',need:'Universal Credit journal',attendance:null},
+    {id:'vr3',name:'Patricia Bourne',via:'Phone',need:'Email setup',attendance:null},
+    {id:'vr4',name:'Roy Bassett',via:'Website',need:'Online banking basics',attendance:null},
+  ],
+  next1:[
+    {id:'vr5',name:'June Whitfield',via:'Website',need:'Video calls — family',attendance:null},
+    {id:'vr6',name:'Terry Oldfield',via:'Library',need:'NHS App — GP appointments',attendance:null},
+  ],
+  next2:[],
+};
+
+function renderVolAttendance(){
+  const sel=document.getElementById('vol-att-session-filter');if(!sel)return;
+  const key=sel.value;
+  const bkList=volSessionResidents[key]||[];
+  const list=document.getElementById('vol-attend-list');if(!list)return;
+  const summary=document.getElementById('vol-att-summary');
+  const dnaBar=document.getElementById('vol-att-dna-bar');
+  if(!bkList.length){list.innerHTML='<p class="govuk-body-s" style="color:var(--gg3)">No residents booked for this session yet. They will appear once residents book via the website or library.</p>';if(summary)summary.textContent='';if(dnaBar)dnaBar.style.display='none';return;}
+  list.innerHTML=bkList.map(r=>{
+    const cls=r.attendance==='attended'?' attended':r.attendance==='dna'?' dna':r.attendance==='walkin'?' walkin':'';
+    return`<div class="attend-card${cls}" id="vac-${r.id}">
+      <div class="attend-name">${r.name}</div>
+      <div class="attend-needs">${r.need}<br><span style="font-size:12px;color:var(--gg2)">Booked via ${r.via}</span></div>
+      <div class="attend-btns">
+        <button class="attend-btn att${r.attendance==='attended'?' sel':''}" onclick="markVolAtt('${r.id}','attended','${key}')">&#10003; Attended</button>
+        <button class="attend-btn dna-b${r.attendance==='dna'?' sel':''}" onclick="markVolAtt('${r.id}','dna','${key}')">&#10007; DNA</button>
+        <button class="attend-btn wlk${r.attendance==='walkin'?' sel':''}" onclick="markVolAtt('${r.id}','walkin','${key}')">+ Walk-in</button>
+      </div>
+    </div>`;
+  }).join('');
+  const dnaC=bkList.filter(r=>r.attendance==='dna').length;
+  const attC=bkList.filter(r=>r.attendance==='attended').length;
+  const wlkC=bkList.filter(r=>r.attendance==='walkin').length;
+  const dnaRate=bkList.length>0?Math.round((dnaC/bkList.length)*100):0;
+  if(summary)summary.textContent=attC+' attended · '+dnaC+' DNA · '+wlkC+' walk-in · '+bkList.filter(r=>!r.attendance).length+' unmarked';
+  if(dnaBar){
+    if(dnaRate>=20){dnaBar.style.display='block';document.getElementById('vol-att-dna-pct').textContent=dnaRate+'% DNA rate — above the 20% threshold. Project Support has been notified.';}
+    else{dnaBar.style.display='none';}
+  }
+}
+
+function markVolAtt(id,type,key){
+  const r=(volSessionResidents[key]||[]).find(x=>x.id===id);
+  if(r){r.attendance=r.attendance===type?null:type;}
+  renderVolAttendance();
+  const resEl=document.getElementById('vol-my-res');
+  if(resEl&&type==='attended'){const n=parseInt(resEl.textContent)||0;resEl.textContent=String(n+1);}
+}
+
 function markAtt(id,status,btn){
   const row=btn.closest('tr');
   row.querySelectorAll('button').forEach(b=>b.style.opacity='0.4');
@@ -1763,6 +1836,7 @@ function volLoadStats(){
   if(resEl)resEl.textContent='18';
   renderPendingResidentBookings();
   renderVolInvitations();
+  renderVolAttendance();
 }
 
 /* Resident bookings pending volunteer confirmation */
