@@ -1661,14 +1661,14 @@ function renderFieldApp(){
         <div id="edc-report-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Outcome report submitted. Included in next UKSPF grant return.</div>
       </div>`;
   } else {
-    // Volunteer interface — schedule set by Project Support via Microsoft Bookings
+    // Volunteer interface
     panel.innerHTML=`
       <p class="govuk-caption">Volunteer Digital Champion</p>
       <h1 class="govuk-h1">My Sessions</h1>
-      <p class="govuk-body-s" style="margin-bottom:20px">Your session schedule is set by the Project Support Officer via Microsoft Bookings. Record attendance and log session outcomes below after each session.</p>
+      <p class="govuk-body-s" style="margin-bottom:20px">Your sessions are scheduled by the Project Support Officer. Residents book directly via the council website or at the library — their bookings appear below so you know who to expect.</p>
 
       <!-- Stats -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px">
         <div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbl);padding:14px">
           <div style="font-size:26px;font-weight:700;color:var(--gbl)" id="vol-my-hrs">—</div>
           <div style="font-size:12px;color:#505a5f">hours this month</div>
@@ -1683,47 +1683,63 @@ function renderFieldApp(){
         </div>
       </div>
 
-      <!-- Upcoming sessions (read-only — set by Project Support via MS Bookings) -->
-      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Your Upcoming Sessions</h2>
-      <p class="govuk-body-s" style="margin-bottom:12px">Scheduled by your Project Support Officer. Contact them to make any changes.</p>
-      <div style="margin-bottom:24px">
-        ${[
-          {date:'Today — Tue 26 Jun 2026',time:'10:00am – 12:00pm',loc:'Dorchester Library',topic:'NHS App & online health',booked:6,capacity:10},
-          {date:'Thu 28 Jun 2026',time:'10:00am – 12:00pm',loc:'Weymouth Library',topic:'Universal Credit & benefits online',booked:4,capacity:8},
-          {date:'Tue 3 Jul 2026',time:'10:00am – 12:00pm',loc:'Dorchester Library',topic:'Email setup & video calls',booked:2,capacity:10},
-        ].map(s=>`<div style="background:#fff;border:1px solid var(--gbd);border-left:4px solid var(--gbl);padding:14px 16px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">
-            <div>
-              <div style="font-weight:700;font-size:14px;margin-bottom:2px">${s.loc}</div>
-              <div style="font-size:13px;color:#505a5f">${s.date} &bull; ${s.time}</div>
-              <div style="font-size:13px;margin-top:3px">Topic: <strong>${s.topic}</strong></div>
-            </div>
-            <div style="text-align:right;font-size:13px;color:#505a5f">${s.booked} / ${s.capacity} residents booked</div>
+      <!-- SESSION 1 — Today with incoming bookings -->
+      <div style="background:#fff;border:2px solid var(--gbl);padding:18px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+          <div>
+            <span style="background:var(--tgn-bg);color:var(--tgn-tx);padding:3px 8px;font-size:11px;font-weight:700;margin-right:8px">TODAY</span>
+            <strong style="font-size:15px">Dorchester Library</strong>
+            <div style="font-size:13px;color:#505a5f;margin-top:4px">Tue 26 Jun 2026 &bull; 10:00am – 12:00pm &bull; Basic digital training</div>
           </div>
-        </div>`).join('')}
+          <div style="text-align:right;font-size:13px"><strong>6</strong> / 10 booked</div>
+        </div>
+        <p style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--gb)">Residents booked in — from website &amp; library</p>
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:var(--gg1)">
+            <th style="padding:7px 10px;text-align:left;font-weight:700">Name</th>
+            <th style="padding:7px 10px;text-align:left;font-weight:700">Booked via</th>
+            <th style="padding:7px 10px;text-align:left;font-weight:700">Digital need</th>
+            <th style="padding:7px 10px;text-align:left;font-weight:700">Attendance</th>
+          </tr></thead>
+          <tbody id="vol-att-tbody">
+            ${[
+              {name:'Margaret Holloway',via:'Website',need:'NHS App — prescriptions',id:'r1'},
+              {name:'Derek Simms',via:'Library',need:'Universal Credit journal',id:'r2'},
+              {name:'Patricia Bourne',via:'Phone',need:'Email setup',id:'r3'},
+              {name:'Roy Bassett',via:'Website',need:'Online banking basics',id:'r4'},
+              {name:'June Whitfield',via:'Library',need:'Video calls — family',id:'r5'},
+              {name:'Terry Oldfield',via:'Website',need:'NHS App — GP appointments',id:'r6'},
+            ].map(r=>`<tr style="border-bottom:1px solid var(--gg1)">
+              <td style="padding:7px 10px;font-weight:600">${r.name}</td>
+              <td style="padding:7px 10px;color:#505a5f">${r.via}</td>
+              <td style="padding:7px 10px;color:#505a5f">${r.need}</td>
+              <td style="padding:7px 10px">
+                <button onclick="markAtt('${r.id}','attended',this)" style="background:var(--tgn-bg);color:var(--tgn-tx);border:none;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">Attended</button>
+                <button onclick="markAtt('${r.id}','dna',this)" style="background:var(--trd-bg);color:var(--trd-tx);border:none;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer">DNA</button>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div style="margin-top:14px">
+          <label class="govuk-label" style="font-size:13px;font-weight:700">Session notes</label>
+          <textarea class="govuk-textarea" id="today-notes" rows="2" style="font-size:13px" placeholder="e.g. Margaret set up NHS App successfully. Derek needs follow-up on 2FA."></textarea>
+          <button class="govuk-btn" onclick="submitTodaySession()" style="font-size:13px;padding:6px 14px;margin-top:8px">Submit session record</button>
+          <div id="today-confirm" class="bk-confirm-box" style="margin-top:8px">&#10003; Session record submitted to Project Support.</div>
+        </div>
       </div>
 
-      <!-- Attendance log -->
-      <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
-      <h2 class="govuk-h2" style="font-size:18px;margin-bottom:6px">Log Today's Attendance</h2>
-      <p class="govuk-body-s" style="margin-bottom:14px">After your session, record who attended so Project Support can track impact and report to funders.</p>
-      <div class="add-form" style="margin-bottom:20px">
-        <div class="add-grid">
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Session</label>
-            <select class="govuk-select" id="att-session" style="font-size:14px">
-              <option>Dorchester Library — 26 Jun 2026</option>
-              <option>Weymouth Library — 28 Jun 2026</option>
-              <option>Dorchester Library — 3 Jul 2026</option>
-            </select></div>
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Residents attended</label><input class="govuk-input" id="att-count" type="number" min="0" style="max-width:80px" placeholder="0"></div>
-          <div class="govuk-form-group" style="margin-bottom:0"><label class="govuk-label" style="font-size:14px">Did not attend (DNA)</label><input class="govuk-input" id="att-dna" type="number" min="0" style="max-width:80px" placeholder="0"></div>
-          <div class="govuk-form-group" style="margin-bottom:0;grid-column:1/-1"><label class="govuk-label" style="font-size:14px">Session notes (optional)</label><textarea class="govuk-textarea" id="att-notes" rows="2" style="font-size:14px" placeholder="e.g. Two residents set up NHS App. One needs follow-up — referred to next session."></textarea></div>
+      <!-- Upcoming sessions -->
+      <h2 class="govuk-h2" style="font-size:17px;margin-bottom:8px;margin-top:8px">Upcoming Sessions</h2>
+      ${[
+        {date:'Thu 28 Jun 2026',time:'10:00am – 12:00pm',loc:'Weymouth Library',topic:'Universal Credit & benefits online',booked:4,capacity:8},
+        {date:'Tue 3 Jul 2026',time:'10:00am – 12:00pm',loc:'Dorchester Library',topic:'Email setup & video calls',booked:2,capacity:10},
+      ].map(s=>`<div style="background:#fff;border:1px solid var(--gbd);padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-weight:700;font-size:14px">${s.loc}</div>
+          <div style="font-size:13px;color:#505a5f">${s.date} &bull; ${s.time} &bull; ${s.topic}</div>
         </div>
-        <div style="margin-top:14px">
-          <button class="govuk-btn" onclick="logAttendance()" style="font-size:14px;padding:7px 16px">Submit attendance</button>
-        </div>
-        <div id="att-confirm" class="bk-confirm-box" style="margin-top:10px">&#10003; Attendance logged. Project Support has been notified.</div>
-      </div>
+        <div style="font-size:13px;color:#505a5f"><strong>${s.booked}</strong> / ${s.capacity} booked</div>
+      </div>`).join('')}
 
       <!-- AI session logger -->
       <hr style="border:none;border-top:1px solid var(--gbd);margin:24px 0">
@@ -1762,10 +1778,21 @@ function renderFieldApp(){
   }
 }
 
-function logAttendance(){
-  const c=document.getElementById('att-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',3000);
+function markAtt(id,status,btn){
+  const row=btn.closest('tr');
+  row.querySelectorAll('button').forEach(b=>b.style.opacity='0.4');
+  btn.style.opacity='1';
+  btn.style.outline='2px solid #0b0c0c';
+  const resEl=document.getElementById('vol-my-res');
+  if(status==='attended'&&resEl)resEl.textContent=String((parseInt(resEl.textContent)||0)+1);
+}
+function submitTodaySession(){
+  const c=document.getElementById('today-confirm');c.style.display='block';setTimeout(()=>c.style.display='none',3000);
   const hrs=document.getElementById('vol-my-hrs');if(hrs)hrs.textContent=String((parseInt(hrs.textContent)||0)+2);
   const sess=document.getElementById('vol-my-sess');if(sess)sess.textContent=String((parseInt(sess.textContent)||0)+1);
+}
+function logAttendance(){
+  const c=document.getElementById('att-confirm');if(c){c.style.display='block';setTimeout(()=>c.style.display='none',3000);}
 }
 
 function logSim(){
