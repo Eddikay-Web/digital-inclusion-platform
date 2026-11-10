@@ -13,7 +13,6 @@ No build step or backend: open the files in a browser or host them on any static
 
 - Add screenshots and a hosted demo link before listing.
 - The pages carry Digital Dorset branding. Confirm you own the rights to that name and content, or rebrand, before selling.
-- Data is held in the browser only; a buyer wanting multi-user use needs a backend added.
 
 ## License
 
